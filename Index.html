@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Mensal - Unico Drop</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .info {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .info p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        .info p strong {
+            color: #2c3e50;
+        }
+        .chart-container {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .chart-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        .chart-container canvas {
+            max-width: 100%;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .topic {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .topic h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        .topic p {
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .topic ul, .topic ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        .topic li {
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .conclusion {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            text-align: center;
+        }
+        .conclusion p {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        .icon {
+            margin-right: 10px;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-chart-line icon"></i>Relatório Mensal - Unico Drop</h1>
+        
+        <div class="info">
+            <p><strong><i class="fas fa-calendar-alt icon"></i>Período:</strong> 01/01/2025 a 31/01/2025</p>
+            <p><strong><i class="fas fa-users icon"></i>Responsáveis:</strong> Filipe, Ryan</p>
+        </div>
+
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-bar icon"></i>Atendimentos Mensais</h2>
+            <canvas id="atendimentosMensaisChart"></canvas>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-info-circle icon"></i>Detalhes dos Atendimentos Mensais</h2>
+            <p>Outubro: 607</p>
+            <p>Novembro: 548</p>
+            <p>Dezembro: 550</p>
+            <p>Janeiro: 728</p>
+        </div>
+
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-line icon"></i>Atendimentos por Semana - Janeiro</h2>
+            <canvas id="atendimentosJaneiroChart"></canvas>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-info-circle icon"></i>Detalhes dos Atendimentos por Semana</h2>
+            <p>Semana 1: 2 atendimentos</p>
+            <p>Semana 2: 172 atendimentos</p>
+            <p>Semana 3: 160 atendimentos</p>
+            <p>Semana 4: 192 atendimentos</p>
+            <p>Semana 5: 202 atendimentos</p>
+        </div>
+
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-pie icon"></i>Atendimentos por Categoria</h2>
+            <canvas id="atendimentosCategoriaChart"></canvas>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-info-circle icon"></i>Detalhes dos Atendimentos por Categoria</h2>
+            <p>Total: 728 Atendimentos e Chamados</p>
+            <p>Atendimento: 532</p>
+            <p>Chamado Aberto: 53</p>
+            <p>Chamado Encerrado: 143</p>
+        </div>
+
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-bar icon"></i>Principais Chamados</h2>
+            <canvas id="chamadosChart"></canvas>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-info-circle icon"></i>Detalhes dos Principais Chamados</h2>
+            <p>erro - rastreio: 59</p>
+            <p>erro - whatsapp automação: 28</p>
+            <p>dúvida - assinatura: 19</p>
+            <p>dúvida - whatsapp automação: 10</p>
+            <p>erro - integração/ sincronização: 10</p>
+        </div>
+
+        <div class="chart-container">
+            <h2><i class="fas fa-chart-bar icon"></i>Principais Atendimentos</h2>
+            <canvas id="atendimentosChart"></canvas>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-info-circle icon"></i>Detalhes dos Principais Atendimentos</h2>
+            <p>dúvida - whatsapp automação: 105</p>
+            <p>Dúvida: Integração de plataforma (Loja, checkout, Gateway): 59</p>
+            <p>dúvida - rastreio: 37</p>
+            <p>dúvida - assinatura: 34</p>
+            <p>dúvida - dashboard: 31</p>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-star icon"></i>Destaques - Integração de Plataformas</h2>
+            <p>Principais Temas Abordados:</p>
+            <ul>
+                <li>Integração com plataformas (Shopify, NuvemShop, Woocommerce, Cartx)</li>
+                <li>Dúvidas sobre gateways de pagamento</li>
+                <li>Configuração de Webhooks e API</li>
+                <li>Problemas com pedidos</li>
+                <li>Dúvidas sobre múltiplas lojas na mesma conta</li>
+            </ul>
+            <p>Plataformas mais mencionadas:</p>
+            <ul>
+                <li>Shopify: 23 atendimentos</li>
+                <li>NuvemShop: 5 atendimentos</li>
+                <li>Woocommerce: 3 atendimentos</li>
+                <li>Cartx: 2 atendimentos</li>
+                <li>Outras: 9 atendimentos (integrações gerais, Webhook, API, etc.)</li>
+            </ul>
+            <p>Destaques do Mês:</p>
+            <ul>
+                <li style="color: red;">Integração com Shopify: Foi o tema mais recorrente, incluindo problemas com API desatualizada, credenciais expiradas e pedidos com status duplicado. (Possivel solução, adicionar um aviso, informando que as credenciais estão expiradas)</li>
+                <li>Dúvidas sobre gateways de pagamento: Muitos clientes questionaram sobre integração com fastpay, NuvemShop e outros sistemas.</li>
+                <li>Uso de múltiplas lojas: Alguns clientes perguntaram se podiam gerenciar múltiplas lojas na mesma conta do Único.</li>
+                <li>Pedidos: Clientes relataram cobranças duplicadas e problemas de checkout.</li>
+                <li>Horários Cartpanda: Horários de integração desatualizados com o UTC -3.</li>
+            </ul>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-star icon"></i>Destaques - Rastreio</h2>
+            <p>1. Resumo Geral</p>
+            <p>Plataformas Envolvidas:</p>
+            <ul>
+                <li>Shopify - 24 registros</li>
+                <li>Nuvemshop - 5 registros</li>
+                <li>Woocommerce - 3 registros</li>
+                <li>Cartx - 1 registro</li>
+                <li>Yampi - 1 registro</li>
+            </ul>
+            <p>Principais Motivos de Contato:</p>
+            <ol>
+                <li>Dúvidas sobre integração de códigos de rastreio</li>
+                <li>Problemas com rastreamento desatualizado</li>
+                <li>Pedidos não encontrados no sistema</li>
+                <li>Dúvidas sobre integrações e atualização de códigos (Shopee, Nuvemshop, Cainiao, etc.)</li>
+            </ol>
+            <p>Destaques e Problemas Reincidentes:</p>
+            <ul>
+                <li>Alto volume de consultas sobre rastreios desatualizados e códigos de rastreio</li>
+                <li>Dificuldades na integração de códigos de rastreio</li>
+                <li style="color: red;">Clientes relataram que não conseguiram encontrar pedidos no menu Rastreio - Lista (Possivel solução: Colocar os pedidos com status em branco na categoria de "Pedido não Encontrado")</li>
+            </ul>
+        </div>
+
+        <div class="topic">
+            <h2><i class="fas fa-star icon"></i>Destaques - WhatsApp Automação</h2>
+            <p>1. Problemas de Automação de WhatsApp</p>
+            <ul>
+                <li>Carrinhos Abandonados: Diversos clientes reportaram problemas com mensagens de carrinhos abandonados não sendo enviadas ou com atraso.</li>
+                <li>Mensagens Não Enviadas: Vários relatos de mensagens de automação não sendo enviadas, com destaque para categorias específicas como "PIX Não Pago" e "Carrinho Abandonado".</li>
+                <li>Dúvidas sobre a Automação: Vários chamados relacionados a dúvidas sobre como configurar ou utilizar a automação de WhatsApp.</li>
+                <li>Problemas com Mensagens Duplicadas ou Atrasadas: Muitos relatos de duplicação ou atraso no envio de mensagens de recuperação de carrinhos e boletos.</li>
+            </ul>
+            <p>2. Banimento de WhatsApp</p>
+            <ul>
+                <li>Banimento de Contas de WhatsApp: Muitos clientes relataram que seus números foram banidos ao tentarem integrar ou usar a automação com o WhatsApp. Algumas situações indicam problemas recorrentes com números aquecidos, com dúvidas sobre o motivo do banimento e se é possível reverter.</li>
+                <li>Problemas com Conexão do WhatsApp: Houve diversos chamados de clientes com dificuldades para conectar seus números do WhatsApp na automação, incluindo números que caem repetidamente.</li>
+            </ul>
+            <p>3. Configurações e Integrações</p>
+            <ul>
+                <li>Integração de API e Webhooks: Diversos clientes tinham dúvidas sobre a integração da API do WhatsApp.</li>
+                <li>Conexão com Vários Números: Alguns clientes perguntaram sobre a possibilidade de usar o mesmo número em várias lojas ou automações diferentes.</li>
+                <li>Erro no Envio de Links e Arquivos: Alguns relatos de problemas ao tentar enviar links (exemplo: boleto) ou arquivos maiores que o limite permitido.</li>
+            </ul>
+            <p>4. Problemas Técnicos e Erros de Envio</p>
+            <ul>
+                <li>Erro no Envio de Mensagens (Falha de Envio): Relatos frequentes de falha no envio de mensagens, como no caso de carrinhos abandonados e boletos.</li>
+                <li>Problemas de Configuração: Alguns clientes tiveram dificuldades para configurar a automação de mensagens, especialmente com categorias específicas como "rastreio" e "PIX vencido".</li>
+            </ul>
+            <p>5. Suporte e Atendimento</p>
+            <ul>
+                <li>Dúvidas sobre Regras e Funcionalidade da Automação: Vários clientes perguntaram sobre as regras de automação (como quando as mensagens são enviadas, a sequência de mensagens, etc.) e também sobre funcionalidades específicas da plataforma.</li>
+            </ul>
+            <p>6. Outras Dúvidas e Problemas</p>
+            <ul>
+                <li>Erro no Encurtador de Links: Alguns clientes relataram problemas com o encurtador de links (exemplo: links de checkout ou boleto não sendo encurtados corretamente).</li>
+                <li style="color: red;">Problemas com Arquivos de Áudio e Vídeo: Houve dúvidas sobre o formato adequado para enviar arquivos de áudio ou vídeo no WhatsApp e arquivos maiores que o limite permitido. (Possivel solução: Adicionar um aviso informando os arquivos permitidos e analisar a possibilidade de aumentar o tamanho de arquivo aceitados na plataforma)</li>
+                <li style="color: rgb(224, 221, 0);">Categoria de Produto: Houve questionamentos sobre o funcionamento de categorias de automação para produtos expecíficos. (Analisar a possibilidade de uma melhoria na automação de Whatsapp que seria adicionar uma categoria para envios de mensagem para produtos específicos do cliente)</li>
+            </ul>
+        </div>
+
+        <div class="conclusion">
+            <p><i class="fas fa-check-circle icon"></i>Os temas mais recorrentes envolvem problemas técnicos relacionados à automação do WhatsApp, principalmente em relação ao envio de mensagens, problemas com números banidos e dificuldades na integração de APIs.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Dados dos atendimentos mensais
+        const atendimentosMensaisData = {
+            labels: ['Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
+            datasets: [{
+                label: 'Atendimentos',
+                data: [607, 548, 550, 728],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderWidth: 1
+            }]
+        };
+
+        // Configuração do gráfico de atendimentos mensais 
+        const atendimentosMensaisConfig = {
+            type: 'bar',
+            data: atendimentosMensaisData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Renderiza o gráfico de atendimentos mensais
+        new Chart(document.getElementById('atendimentosMensaisChart'), atendimentosMensaisConfig);
+
+        // Dados dos atendimentos por semana em janeiro
+        const atendimentosJaneiroData = {
+            labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+            datasets: [{
+                label: 'Atendimentos',
+                data: [2, 172, 160, 192, 202],
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderWidth: 1
+            }]
+        };
+
+        // Configuração do gráfico de atendimentos por semana em janeiro
+        const atendimentosJaneiroConfig = {
+            type: 'line',
+            data: atendimentosJaneiroData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Renderiza o gráfico de atendimentos por semana em janeiro
+        new Chart(document.getElementById('atendimentosJaneiroChart'), atendimentosJaneiroConfig);
+
+        // Dados dos atendimentos por categoria
+        const atendimentosCategoriaData = {
+            labels: ['Atendimento', 'Chamado Aberto', 'Chamado Encerrado'],
+            datasets: [{
+                label: 'Atendimentos por Categoria',
+                data: [532, 53, 143],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Configuração do gráfico de atendimentos por categoria
+        const atendimentosCategoriaConfig = {
+            type: 'doughnut',
+            data: atendimentosCategoriaData
+        };
+
+        // Renderiza o gráfico de atendimentos por categoria
+        new Chart(document.getElementById('atendimentosCategoriaChart'), atendimentosCategoriaConfig);
+
+        // Dados dos principais chamados
+        const chamadosData = {
+            labels: ['erro - rastreio', 'erro - whatsapp automação', 'dúvida - assinatura', 'dúvida - whatsapp automação', 'erro - integração/ sincronização'],
+            datasets: [{
+                label: 'Principais Chamados',
+                data: [59, 28, 19, 10, 10],
+                backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                borderWidth: 1
+            }]
+        };
+
+        // Configuração do gráfico de principais chamados
+        const chamadosConfig = {
+            type: 'bar',
+            data: chamadosData,
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Renderiza o gráfico de principais chamados
+        new Chart(document.getElementById('chamadosChart'), chamadosConfig);
+
+        // Dados dos principais atendimentos
+        const atendimentosData = {
+            labels: ['dúvida - whatsapp automação', 'Dúvida: Integração de plataforma', 'dúvida - rastreio', 'dúvida - assinatura', 'dúvida - dashboard'],
+            datasets: [{
+                label: 'Principais Atendimentos',
+                data: [105, 59, 37, 34, 31],
+                backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                borderWidth: 1
+            }]
+        };
+
+        // Configuração do gráfico de principais atendimentos
+        const atendimentosConfig = {
+            type: 'bar',
+            data: atendimentosData,
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Renderiza o gráfico de principais atendimentos
+        new Chart(document.getElementById('atendimentosChart'), atendimentosConfig);
+    </script>
+</body>
+</html>
