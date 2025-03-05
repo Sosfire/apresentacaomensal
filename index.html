@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Análise Mensal e Semanal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0faff;
+            --text-color: #0a192f;
+            --card-bg: rgba(0, 0, 0, 0.05);
+            --accent-color: #0099ff;
+        }
+        .dark-mode {
+            --bg-color: #0a192f;
+            --text-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --accent-color: #00b4ff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+        }
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .glass:hover {
+            transform: translateY(-5px);
+        }
+        .navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+        }
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .toggle-btn {
+            cursor: pointer;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .toggle-btn:hover {
+            background: #007acc;
+            transform: scale(1.05);
+        }
+        .btn-analise {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .btn-analise:hover {
+            background: #007acc;
+            transform: scale(1.05);
+        }
+        .select-box {
+            appearance: none;
+            background: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .select-box:hover {
+            background: #007acc;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col" id="theme">
+    <nav class="navbar flex justify-between items-center shadow-md px-6">
+        <a href="index.html">
+            <img src="logo.png" alt="Dashboard Logo" class="h-16" style="filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));">
+        </a>        <button class="toggle-btn" onclick="toggleTheme()">🌙 / ☀️</button>
+    </nav>
+
+    <div class="container mx-auto px-6 py-12 text-center">
+        <h1 class="title mb-10">Análise Mensal e Semanal - 2025</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <script>
+                const meses = [
+                    { nome: "Janeiro", analise: "jan-analise.html", semanas: ["jan-semana1.html", "jan-semana2.html", "jan-semana3.html", "jan-semana4.html"] },
+                    { nome: "Fevereiro", analise: "fmes.html", semanas: ["fev-semana1.html", "fev-semana2.html", "jterceira.html", "jquarta.html"] },
+                    { nome: "Março", analise: "mar-analise.html", semanas: ["mar-semana1.html", "mar-semana2.html", "mar-semana3.html", "mar-semana4.html"] },
+                    { nome: "Abril", analise: "abr-analise.html", semanas: ["abr-semana1.html", "abr-semana2.html", "abr-semana3.html", "abr-semana4.html"] },
+                    { nome: "Maio", analise: "mai-analise.html", semanas: ["mai-semana1.html", "mai-semana2.html", "mai-semana3.html", "mai-semana4.html"] },
+                    { nome: "Junho", analise: "jun-analise.html", semanas: ["jun-semana1.html", "jun-semana2.html", "jun-semana3.html", "jun-semana4.html"] }
+                ];
+                document.write(meses.map(mes => `
+                    <div class="glass p-8 rounded-lg shadow-lg text-center">
+                        <h2 class="text-3xl font-semibold mb-6"><a href="${mes.analise}" class="text-blue-500 hover:underline">${mes.nome}</a></h2>
+                        <a href="${mes.analise}" class="btn-analise">Análise Mensal</a>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            ${mes.semanas.map((link, i) => `<a href="${link}" class="bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-lg p-4 font-medium block">Semana ${i + 1}</a>`).join('')}
+                        </div>
+                    </div>
+                `).join(''));
+            </script>
+        </div>
+
+        <!-- Adicionando gráficos após os meses -->
+        <div class="mt-12 p-8 glass rounded-lg shadow-lg max-w-4xl mx-auto">
+            <h3 class="text-2xl font-semibold mb-4">Chamados por Mês</h3>
+            <canvas id="mensalChart"></canvas>
+        </div>
+        
+        <div class="mt-12 p-8 glass rounded-lg shadow-lg max-w-4xl mx-auto">
+            <h3 class="text-2xl font-semibold mb-4">Chamados por Semana</h3>
+            <select id="mesSelect" class="select-box mb-4">
+                <option value="Janeiro">Janeiro</option>
+                <option value="Fevereiro">Fevereiro</option>
+            </select>
+            <canvas id="semanalChart"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        // Gráfico de linha para chamados por mês
+        const mensalData = {
+            labels: ["Janeiro", "Fevereiro"],
+            datasets: [{
+                label: "Atendimentos e Chamados",
+                data: [729, 840],
+                borderColor: "#0099ff",
+                fill: false,
+                tension: 0.3
+            }]
+        };
+        new Chart(document.getElementById("mensalChart"), {
+            type: "line",
+            data: mensalData
+        });
+
+        // Dados de chamados semanais
+        const chamadosSemanais = {
+            "Janeiro": [174, 160, 192, 203],
+            "Fevereiro": [184, 215, 212, 229]
+        };
+
+        function atualizarGraficoSemanal() {
+            const mesSelecionado = document.getElementById("mesSelect").value;
+            semanalChart.data.datasets[0].data = chamadosSemanais[mesSelecionado] || [];
+            semanalChart.update();
+        }
+
+        // Gráfico de chamados semanais interativo
+        const semanalChart = new Chart(document.getElementById("semanalChart"), {
+            type: "bar",
+            data: {
+                labels: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
+                datasets: [{
+                    label: "Chamados por Semana",
+                    data: chamadosSemanais["Janeiro"],
+                    backgroundColor: "#0099ff"
+                }]
+            }
+        });
+
+        document.getElementById("mesSelect").addEventListener("change", atualizarGraficoSemanal);
+    </script>
+</body>
+</html>
