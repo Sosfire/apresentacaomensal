@@ -43,8 +43,10 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6; /* Cor de fundo mais suave */
-            color: #333;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+
         }
         .icon {
             margin-right: 0.5rem;
@@ -58,7 +60,7 @@
             display: block; /* Mostra o gráfico ativo */
         }
         .card {
-            background-color: white;
+            background: var(--accent-color);
             border-radius: 0.5rem;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
