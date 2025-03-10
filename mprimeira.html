@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Semanal - Unico Drop</title>
+    
+    <!-- Importando o Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6; /* Cor de fundo mais suave */
+            color: #333;
+        }
+        .icon {
+            margin-right: 0.5rem;
+        }
+        .chart-container {
+            display: none; /* Esconde todos os gráficos inicialmente */
+            max-width: 900px; /* Define uma largura máxima para os gráficos */
+            margin: 0 auto; /* Centraliza os gráficos */
+        }
+        .active {
+            display: block; /* Mostra o gráfico ativo */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: transform 0.2s, box-shadow 0.2s; /* Transição suave */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Efeito de hover */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        .navbar {
+            background-color: #059bff; /* Cor da navbar */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center; /* Centraliza o conteúdo */
+        }
+        .logo {
+            max-width: 150px; /* Tamanho do logo */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container mx-auto flex justify-center items-center">
+            <a href="index.html">
+                <img src="logo.png" alt="Unico Drop Logo" class="logo">
+            </a>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-extrabold text-purple-700">
+                <i class="fas fa-chart-line icon"></i>Relatório Semanal - Unico Drop
+            </h1>
+        </header>
+
+        <!-- Seção de Informações Gerais -->
+        <section class="card p-6 mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-3xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-calendar-alt icon"></i>Informações Gerais
+            </h2>
+            <p class="text-lg"><strong>Período:</strong> <span class="text-gray-700">01/03/2025 a 09/03/2025</span></p>
+            <p class="text-lg"><strong>Responsáveis:</strong> <span class="text-gray-700">Filipe, Ryan</span></p>
+        </section>
+
+        <!-- Seção de Total de Atendimentos e Chamados -->
+        <section class="card p-6 mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-3xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-chart-bar icon"></i>Total de Atendimentos e Chamados
+            </h2>
+            <p class="text-lg">Total: <strong class="text-green-600">141</strong> Atendimento e Chamados</p>
+            <p class="text-lg">Categoria: <strong class="text-blue-600">91</strong> Atendimento, <strong class="text-red-600">22</strong> Chamado Aberto, <strong class="text-orange-600">28</strong> Chamado Encerrado</p>
+        </section>
+        <!-- Seção para os Botões -->
+        <section class="button-container text-center">
+            <button id="btnChamados" class="bg-purple-600 text-white px-4 py-2 rounded-lg mr-2 hover:bg-purple-700 transition">Chamados</button>
+            <button id="btnAtendimentos" class="bg-purple-600 text-white px-4 py-2 rounded-lg mr-2 hover:bg-purple-700 transition">Atendimentos</button>
+            <button id="btnTotalChamados" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">Total de Chamados</button>
+        </section>
+
+        <!-- Seção para os Gráficos -->
+        <section class="mb-6">
+            <!-- Seção para o gráfico de Chamados -->
+            <div class="chart-container active" id="chartChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Distribuição de Chamados
+                </h2>
+                <canvas id="chamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos -->
+            <div class="chart-container" id="chartAtendimentos">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Total de Chamados -->
+            <div class="chart-container" id="chartTotalChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Total de Chamados
+                </h2>
+                <canvas id="totalChamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Chamados por Categoria -->
+            <div class="chart-container" id="chartChamadosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Chamados por Categoria
+                </h2>
+                <canvas id="chamadosCategoriaChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos por Categoria -->
+            <div class="chart-container" id="chartAtendimentosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosCategoriaChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Seção para Chamados Abertos da Semana -->
+        <section class="card p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-exclamation-circle icon"></i>Chamados Abertos da Semana
+            </h2>
+            <div class="space-y-4">
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96759537:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>09/03/2025 08:47:31</strong></p>
+                    <p>Resumo: Taxados desatualizado, não passou pedido.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96727605:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>08/03/2025 13:18:13</strong></p>
+                    <p>Resumo: Geral, pedidos 11104, 11330, 11438, 11727, 11381, 11577.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96713239:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>08/03/2025 07:59:08</strong></p>
+                    <p>Resumo: Geral.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96713190:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>08/03/2025 07:56:41</strong></p>
+                    <p>Resumo: Pedido 12872 foi devolvido na alfândega e não tem nenhuma informação do pedido.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96689917:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 18:01:16</strong></p>
+                    <p>Resumo: (tem cainiao) atualização de 2 dias atrás não integrou 5300 NM747967833BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96689689:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 17:56:28</strong></p>
+                    <p>Resumo: (dados amazon não integrou UD) 34672 - ND513205222BR 34100 - ND514445958BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96689598:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 17:53:32</strong></p>
+                    <p>Resumo: (info cainiao não salvou UD, fila zerada, rastreio em 1 só loja) 1378 NM757918766BR 1380 NM757910060BR 1382 NM757916867BR e outros.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96684366:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 15:48:53</strong></p>
+                    <p>Resumo: 30077812873 - Cliente tem pedidos desatualizados. Pedido ex: 7255928640832 Código: ND491718143BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96683470:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 15:28:52</strong></p>
+                    <p>Resumo: 81523 - Cliente tem alguns pedidos com o status não atualizado. Pedido ex: #1435 Código de rastreio: BR2444707867292SPXLM3630574.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96673932:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 12:19:57</strong></p>
+                    <p>Resumo: 61316825347 - Cliente tem rastreios desatualizados com atualizações. Pedido ex: #3380 código: ND513183473BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96670579:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 11:18:01</strong></p>
+                    <p>Resumo: 42175 - Cliente tem rastreios desatualizados, EX: #24312, AV041270427BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96669904:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>07/03/2025 11:06:40</strong></p>
+                    <p>Resumo: 82867 - Micael UP, liberar multinúmeros.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96608391:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>06/03/2025 09:35:08</strong></p>
+                    <p>Resumo: (cainiao desatualizado, só tem sites correios siterastreio, pacotevicio) 81395 - Cliente tem rastreios desatualizados, EX: #1071, NM752666102BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96607101:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>06/03/2025 09:14:17</strong></p>
+                    <p>Resumo: (menos 24hs) 61316825347 - Cliente tem rastreios desatualizados, EX: 3390, ND515294865BR.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96606841:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>06/03/2025 09:06:02</strong></p>
+                    <p>Resumo: (cainiao desatualizado) 40025 - Cliente informou que continua com o caso do #96564612 acontecendo.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96575649:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>05/03/2025 16:55:21</strong></p>
+                    <p>Resumo: 50152 - Cliente Grande tem taxas de Gateway que não estão batendo com os valores da plataforma dele.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96561483:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>05/03/2025 12:10:01</strong></p>
+                    <p>Resumo: 83320 - Cliente está informando uma discrepância de valores no DRE e na Dashboard.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96511363:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>04/03/2025 10:16:49</strong></p>
+                    <p>Resumo: Adicionar no pós-venda filtro por itens do pedido (1 item ou mais).</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96504203:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>04/03/2025 07:53:03</strong></p>
+                    <p>Resumo: Novos tempo de 45, 50 60 dias.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96392651:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>01/03/2025 17:43:20</strong></p>
+                    <p>Resumo: 986 ND526120199BR api 1track pegou cainiao mesmo no site deles tendo correios.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 96388059:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>01/03/2025 15:22:51</strong></p>
+                    <p>Resumo: ND519968934BR 212941 correios dt 24 e cainiao info dia 25 sem tradução e movimentação que não existe correios.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quantidade de Chamados por Plataforma -->
+        <section class="card p-6 mb-6 bg-gray-50 border border-gray-200 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
+                <i class="fas fa-list icon mr-2"></i>Quantidade de Chamados por Plataforma
+            </h2>
+            <ul class="list-disc pl-5 space-y-2">
+                <li class="text-lg">Shopify: <span class="font-bold text-purple-600">87 chamados</span></li>
+                <li class="text-lg">Yampi: <span class="font-bold text-purple-600">11 chamados</span></li>
+                <li class="text-lg">Woocommerce: <span class="font-bold text-purple-600">6 chamados</span></li>
+                <li class="text-lg">Visitors: <span class="font-bold text-purple-600">7 chamados</span></li>
+                <li class="text-lg">Nuvemshop: <span class="font-bold text-purple-600">3 chamados</span></li>
+                <li class="text-lg">Kiwify: <span class="font-bold text-purple-600">3 chamados</span></li>
+                <li class="text-lg">Cartx: <span class="font-bold text-purple-600">2 chamados</span></li>
+            </ul>
+            <p class="mt-4 text-sm text-gray-600"><strong>Observação:</strong> A grande maioria dos chamados está concentrada na plataforma Shopify, indicando maior volume de dúvidas e problemas nesta área.</p>
+        </section>
+
+        <!-- Relatório Detalhado -->
+        <section class="card p-6 mb-6 bg-gray-50 border border-gray-200 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
+                <i class="fas fa-info-circle icon mr-2"></i>Relatório Detalhado de Chamados
+            </h2>
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg">Resumo dos Chamados Encerrados e das Dúvidas do Mês</h3>
+                <h4 class="font-semibold mt-4 text-md">1. Resumo Geral dos Chamados</h4>
+                <p class="text-sm">Neste mês, os chamados se dividiram principalmente entre dúvidas e solicitações relacionadas a:</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li class="text-gray-800"><strong>Automação do WhatsApp:</strong> Dúvidas frequentes sobre a configuração e o funcionamento dos envios automáticos e manuais, incluindo questões de integração e resposta automatizada.</li>
+                    <li class="text-gray-800"><strong>Integração de Pedidos e Carrinhos:</strong> Erros na integração dos pedidos e carrinhos entre as plataformas, causando falhas na atualização de dados e sincronização dos registros.</li>
+                    <li class="text-gray-800"><strong>Rastreamento:</strong> Problemas com a atualização e exibição dos status dos pedidos, com dúvidas sobre plugins e formatos de rastreio.</li>
+                    <li class="text-gray-800"><strong>Assinaturas e E-mails:</strong> Questões relativas ao envio de notificações e configurações de assinatura, com relatos de mensagens não enviadas conforme esperado.</li>
+                    <li class="text-gray-800"><strong>Outras Integrações:</strong> Demandas sobre a integração de plataformas (loja, checkout, gateway) e outros ajustes pontuais, como valores incorretos em anúncios.</li>
+                </ul>
+                <p class="mt-4 text-sm">A equipe de suporte lidou com <strong class="text-purple-600">140 chamados</strong> no total, resolvendo questões variadas.</p>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-semibold">2. Detalhamento por Categoria</h4>
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Rastreios Desatualizados (22 Chamados)</h5>
+                    <p>Resumo: Os clientes estão enfrentando problemas críticos com a atualização dos rastreios dos pedidos. Mesmo quando há movimentações recentes (como status "Taxados", "Em trânsito" ou "Pagamento confirmado"), as informações na plataforma permanecem defasadas em relação aos dados fornecidos por Correios, Cainiao ou outras fontes de logística. Essa discrepância gera insegurança e obriga os clientes a recorrerem ao suporte para ajustes manuais, impactando a confiança na integração automatizada do sistema.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #27978: Cliente Ederson Gomes de Araújo questiona sobre a defasagem na atualização dos rastreios.</li>
+                        <li>Chamado #82106: O cliente relata atrasos significativos no envio das notificações de rastreio, prejudicando o acompanhamento dos pedidos.</li>
+                        <li>Chamado #40025: Cliente Vitor informa que, apesar de movimentações recentes registradas pelos Correios, os rastreios na plataforma permanecem desatualizados.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Pedidos Não Integrados (11 Chamados)</h5>
+                    <p>Resumo: Há uma série de chamados em que os pedidos não estão sendo incorporados corretamente na plataforma. Os problemas vão desde a ausência de dados completos dos clientes até a falta de retroatividade na integração, o que resulta em inconsistências entre os sistemas. Essa falha compromete não só a visualização e o acompanhamento dos pedidos, mas também a execução de automações e relatórios financeiros, gerando transtornos operacionais e dúvidas quanto à confiabilidade dos dados.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #33974: Cliente Kleber de Oliveira dos Santos informa que determinados pedidos não estão sendo integrados, afetando o fluxo de informações.</li>
+                        <li>Chamado #83352: Cliente Use Singular destaca que a sincronização dos pedidos está falhando, deixando registros incompletos na plataforma.</li>
+                        <li>Chamado #81939: Caso em que o cliente, identificado como "stevany", relata problemas tanto com pedidos sem dados dos clientes quanto com pedidos não integrados.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Automação de WhatsApp / Recuperação de Carrinho (16 Chamados)</h5>
+                    <p>Resumo: Os problemas nesta categoria estão relacionados à execução e configuração da automação via WhatsApp. Os clientes enfrentam falhas na disparagem das mensagens, tanto na recuperação de carrinhos abandonados quanto na comunicação de atualizações importantes. Esse cenário pode ocorrer por inconsistências na integração dos dados dos contatos, erros na configuração do funil ou até na exibição incorreta de imagens dos produtos. Tais falhas comprometem a efetividade das campanhas de recuperação e a comunicação com os clientes, impactando diretamente as taxas de conversão.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #83349: Cliente Victor Amaral Santos questiona o funcionamento da automação de WhatsApp, evidenciando problemas na integração do plugin de rastreio e dúvidas sobre como ocultar palavras em determinadas mensagens.</li>
+                        <li>Chamado #82435: Cliente Kayky Britis Mendes denuncia que as mensagens de recuperação de carrinho não estão alcançando todos os leads, apontando inconsistências no disparo automático.</li>
+                        <li>Chamado #77547: Cliente Eduardo Fagundes apresenta dificuldades relacionadas à configuração do funil de carrinhos abandonados, que prejudica o disparo adequado das mensagens.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Taxas e Tarifas (7 Chamados)</h5>
+                    <p>Resumo: Os chamados nessa categoria demonstram uma preocupação constante dos clientes com a transparência e a precisão das taxas e tarifas aplicadas. As dúvidas giram em torno dos custos de cartão, valores integrados no dashboard e a correta aplicação das tarifas. Inconsistências na exibição ou integração dos valores geram confusão, demandando suporte para esclarecimento e, em alguns casos, ajustes que podem afetar a estratégia financeira e operacional dos clientes.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #50152: Cliente Velvet questiona a exibição dos valores de taxas e tarifas, sinalizando possíveis discrepâncias na integração dos dados financeiros.</li>
+                        <li>Chamado #44970: Cliente Gabriel Thomaz Nogueira busca esclarecimentos sobre as taxas de cartão, indicando que os valores apresentados não correspondem às expectativas.</li>
+                        <li>Chamado #83080: Cliente Murilo Chaddad relata dúvidas sobre a integração automática das taxas, evidenciando incertezas quanto à regularidade dos dados.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Integração do Checkout / Mercado Pago (6 Chamados)</h5>
+                    <p>Resumo: Os problemas nesta categoria referem-se à integração do checkout nativo com soluções de pagamento, como o Mercado Pago. Os clientes informam que dados essenciais – como informações do carrinho, métodos de pagamento e aplicação de cupons – não são transmitidos de forma completa para a plataforma. Essa falha na integração prejudica tanto a experiência de compra quanto o fluxo de informações, comprometendo a gestão dos pedidos e a análise de performance das vendas.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #83324: Cliente Allure Joias questiona a integração do checkout com o Mercado Pago, evidenciando que dados críticos dos pedidos não estão sendo integrados adequadamente.</li>
+                        <li>Chamado #83271: Cliente PLANO C COMPANY relata falhas na integração do checkout nativo da Shopify com o Mercado Pago, resultando em inconsistências no processamento dos pedidos.</li>
+                        <li>Chamado #83324 (segunda ocorrência): Outro registro reforça a necessidade de aprimoramento na integração completa dos dados dos pedidos via checkout com Mercado Pago.</li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção para Sugestões da Semana -->
+        <section class="container mx-auto p-6 mb-6 bg-white shadow-lg rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-lightbulb icon"></i> Sugestões da Semana
+            </h2>
+            <p class="text-gray-700">Nesta semana, foram registradas cerca de <strong>8</strong> sugestões/ideias dos clientes. Confira um resumo abaixo:</p>
+            <div class="bg-gray-100 p-4 rounded-lg mb-4 mt-6">
+                <h4 class="font-semibold mt-4 text-purple-500">Sugestões:</h4>
+                <ul class="list-disc pl-5">
+                    <li class="mb-3"><strong>ID  : #83324:</strong> Integrar o checkout com o Mercado Pago para que os dados dos pedidos (como informações de carrinho, métodos de pagamento e cupons) sejam transmitidos de forma completa e precisa.</li>
+                    <li class="mb-3"><strong>ID  : #30077812873:</strong> Atualizar de forma geral as imagens dos produtos na Unico – os clientes gostariam de um botão.</li>
+                    <li class="mb-3"><strong>ID  : #27648:</strong> Cliente gostaria de uma forma de modificar a mensagem padrão do sistema do plugin de rastreamento.</li>
+                    <li class="mb-3"><strong>ID  : #75290:</strong> Verificar a possibilidade de integrar os chargebacks da Appmax diretamente no Único, facilitando o acompanhamento desses eventos.</li>
+                    <li class="mb-3"><strong>ID  : #81771 - visitor1123454:</strong> Liberar (ou estender) 7 dias grátis adicionais para teste da plataforma, ampliando o período de experimentação para os clientes.</li>
+                    <li class="mb-3"><strong>ID  : #44970:</strong> Incluir a opção de exportação de LEADS, permitindo que o cliente extraia todos os dados dos contatos recebidos pela plataforma.</li>
+                    <li class="mb-3"><strong>ID  : #83271:</strong> Cliente gostaria de uma integração do checkout nativo da Shopify com o Mercado Pago checkout, de forma que a integração funcione de maneira completa e sem inconsistências.</li>
+                    <li class="mb-3"><strong>ID  : #82334:</strong> Desenvolver uma funcionalidade para a integração automática dos custos dos produtos, facilitando a conciliação financeira na plataforma. (Outras plataformas além da Shopify)</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Função para criar gráficos
+        const createChart = (ctx, type, data, options) => {
+            return new Chart(ctx, {
+                type: type,
+                data: data,
+                options: options
+            });
+        };
+
+        // Dados e configurações dos gráficos
+        const chartsData = {
+            chamados: {
+                labels: ['Erro - Rastreio', 'Erro - Integração/Sincronização', 'Dúvida - Assinatura', 'Dúvida - Custo Produto'],
+                datasets: [{
+                    label: 'Chamados por Tipo',
+                    data: [21, 6, 3, 2],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['Dúvida - WhatsApp Automação', 'Dúvida - Integração de Plataforma', 'Dúvida - Rastreio', 'Dúvida - Dashboard', 'Dúvida - Resposta Chamado'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [18, 12, 8, 7, 6],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            totalChamados: {
+                labels: ['Atendimentos', 'Chamado Aberto', 'Chamado Encerrado'],
+                datasets: [{
+                    label: 'Total de Chamados',
+                    data: [91, 22, 28],
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+
+        // Configurações dos gráficos
+        const chartsConfig = {
+            chamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            atendimentos: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            totalChamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Renderiza os gráficos
+        const ctxChamados = document.getElementById('chamadosChart').getContext('2d');
+        const ctxAtendimentos = document.getElementById('atendimentosChart').getContext('2d');
+        const ctxTotalChamados = document.getElementById('totalChamadosChart').getContext('2d');
+
+        createChart(ctxChamados, chartsConfig.chamados.type, chartsData.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentos, chartsConfig.atendimentos.type, chartsData.atendimentos, chartsConfig.atendimentos.options);
+        createChart(ctxTotalChamados, chartsConfig.totalChamados.type, chartsData.totalChamados, chartsConfig.totalChamados.options);
+
+        // Função para alternar entre os gráficos
+        const showChart = (chartId) => {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(chartId).classList.add('active');
+        };
+
+        // Eventos de clique nos botões
+        document.getElementById('btnChamados').addEventListener('click', () => showChart('chartChamados'));
+        document.getElementById('btnAtendimentos').addEventListener('click', () => showChart('chartAtendimentos'));
+        document.getElementById('btnTotalChamados').addEventListener('click', () => showChart('chartTotalChamados'));
+
+        // Dados e configurações dos gráficos adicionais
+        const chartsDataCategoria = {
+            chamados: {
+                labels: ['Shopify', 'Nuvemshop', 'Cartx', 'Yampi', 'Woocommerce'],
+                datasets: [{
+                    label: 'Chamados por Categoria',
+                    data: [154, 10, 8, 10, 6],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['WhatsApp Automação', 'Integração de Plataforma', 'Rastreio', 'Assinatura', 'Config Pendente'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [23, 15, 19, 20, 7],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+
+        // Renderiza os gráficos adicionais
+        const ctxChamadosCategoria = document.getElementById('chamadosCategoriaChart').getContext('2d');
+        const ctxAtendimentosCategoria = document.getElementById('atendimentosCategoriaChart').getContext('2d');
+
+        createChart(ctxChamadosCategoria, 'bar', chartsDataCategoria.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentosCategoria, 'bar', chartsDataCategoria.atendimentos, chartsConfig.atendimentos.options);
+    </script>
+</body>
+</html>
+                   
