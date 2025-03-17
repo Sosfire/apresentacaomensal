@@ -136,6 +136,7 @@
             <select id="mesSelect" class="select-box mb-4">
                 <option value="Janeiro">Janeiro</option>
                 <option value="Fevereiro">Fevereiro</option>
+                <option value="Março">Março</option>
             </select>
             <canvas id="semanalChart"></canvas>
         </div>
@@ -149,7 +150,7 @@
 
         // Gráfico de linha para chamados por mês
         const mensalData = {
-            labels: ["Janeiro", "Fevereiro"],
+            labels: ["Janeiro", "Fevereiro", "Março"],
             datasets: [{
                 label: "Atendimentos e Chamados",
                 data: [729, 840],
@@ -166,7 +167,8 @@
         // Dados de chamados semanais
         const chamadosSemanais = {
             "Janeiro": [174, 160, 192, 203],
-            "Fevereiro": [184, 215, 212, 229]
+            "Fevereiro": [184, 215, 212, 229],
+            "Março": [141, 264, 0, 0]
         };
 
         function atualizarGraficoSemanal() {
