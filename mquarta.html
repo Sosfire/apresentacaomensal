@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Semanal - Unico Drop</title>
+    
+    <!-- Importando o Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f3f4f6; /* Cor de fundo mais suave */
+            color: #333;
+        }
+        .icon {
+            margin-right: 0.5rem;
+        }
+        .chart-container {
+            display: none; /* Esconde todos os gráficos inicialmente */
+            max-width: 900px; /* Define uma largura máxima para os gráficos */
+            margin: 0 auto; /* Centraliza os gráficos */
+        }
+        .active {
+            display: block; /* Mostra o gráfico ativo */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: transform 0.2s, box-shadow 0.2s; /* Transição suave */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Efeito de hover */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        .navbar {
+            background-color: #059bff; /* Cor da navbar */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center; /* Centraliza o conteúdo */
+        }
+        .logo {
+            max-width: 150px; /* Tamanho do logo */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container mx-auto flex justify-center items-center">
+            <a href="index.html">
+                <img src="logo.png" alt="Unico Drop Logo" class="logo">
+            </a>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-extrabold text-purple-700">
+                <i class="fas fa-chart-line icon"></i>Relatório Semanal - Unico Drop
+            </h1>
+        </header>
+
+        <!-- Seção de Informações Gerais -->
+        <section class="card p-6 mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-3xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-calendar-alt icon"></i>Informações Gerais
+            </h2>
+            <p class="text-lg"><strong>Período:</strong> <span class="text-gray-700">23/03/2025 a 30/03/2025</span></p>
+            <p class="text-lg"><strong>Responsáveis:</strong> <span class="text-gray-700">Filipe, Ryan</span></p>
+        </section>
+
+        <!-- Seção de Total de Atendimentos e Chamados -->
+        <section class="card p-6 mb-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h2 class="text-3xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-chart-bar icon"></i>Total de Atendimentos e Chamados
+            </h2>
+            <p class="text-lg">Total: <strong class="text-green-600">206</strong> Atendimento e Chamados</p>
+            <p class="text-lg">Categoria: <strong class="text-blue-600">164</strong> Atendimento, <strong class="text-red-600">6</strong> Chamado Aberto, <strong class="text-orange-600">36</strong> Chamado Encerrado</p>
+        </section>
+        <!-- Seção para os Botões -->
+        <section class="button-container text-center">
+            <button id="btnChamados" class="bg-purple-600 text-white px-4 py-2 rounded-lg mr-2 hover:bg-purple-700 transition">Chamados</button>
+            <button id="btnAtendimentos" class="bg-purple-600 text-white px-4 py-2 rounded-lg mr-2 hover:bg-purple-700 transition">Atendimentos</button>
+            <button id="btnTotalChamados" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">Total de Chamados</button>
+        </section>
+
+        <!-- Seção para os Gráficos -->
+        <section class="mb-6">
+            <!-- Seção para o gráfico de Chamados -->
+            <div class="chart-container active" id="chartChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Distribuição de Chamados
+                </h2>
+                <canvas id="chamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos -->
+            <div class="chart-container" id="chartAtendimentos">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Total de Chamados -->
+            <div class="chart-container" id="chartTotalChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Total de Chamados
+                </h2>
+                <canvas id="totalChamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Chamados por Categoria -->
+            <div class="chart-container" id="chartChamadosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Chamados por Categoria
+                </h2>
+                <canvas id="chamadosCategoriaChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos por Categoria -->
+            <div class="chart-container" id="chartAtendimentosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosCategoriaChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Seção para Chamados Abertos da Semana -->
+        <section class="card p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-exclamation-circle icon"></i>Chamados Abertos da Semana
+            </h2>
+            <div class="space-y-4">
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97903207:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>29/03/2025 10:33:46</strong></p>
+                    <p>Resumo: Rastreio 6032325533139 teve 116 atualizações no mesmo dia. No rastreador de encomendas, só aparece "pre-advice", e a informação foi gravada em loop, repetindo a mesma atualização. O registro foi deletado das plataformas AmazonOrders e OrdersTracking devido à reclamação do cliente.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97856528:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>28/03/2025 11:06:08</strong></p>
+                    <p>Resumo: Cliente utilizando WhatsApp Web Business não está conseguindo visualizar a extensão lateral após a atualização do WhatsApp Web. O cliente confirmou que a versão do WhatsApp Web não está na versão beta. Versão utilizada: 2.3000.1021356830. O print da versão beta desativada foi fornecido.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97804490:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>27/03/2025 09:15:39</strong></p>
+                    <p>Resumo: Cliente da ÚnicoPag solicita a possibilidade de adicionar uma tarifa fixa de R$1,49 em cada venda para todas as formas de pagamento. A solicitação está sendo verificada.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97776030:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>26/03/2025 17:52:46</strong></p>
+                    <p>Resumo: Cliente informou que os e-mails de teste não estão sendo enviados. Embora os e-mails constem como enviados na base, eles não chegam ao destinatário.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97769378:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>26/03/2025 15:33:09</strong></p>
+                    <p>Resumo: A automação de e-mail do cliente não está funcionando corretamente. Apesar de vários envios estarem registrados no dashboard de e-mails do Único, os e-mails não estão sendo recebidos pelo cliente, nem mesmo na pasta de spam.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 97719593:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>25/03/2025 17:35:25</strong></p>
+                    <p>Resumo: A automação de pós-venda do cliente não está incluindo as informações de nome do produto, quantidade e variante nas mensagens enviadas.</p>
+                </div>
+
+                <div class="border p-4 rounded-lg shadow-md">
+                    <h3 class="font-semibold text-lg">ID 78426:</h3>
+                    <p class="text-sm text-gray-600">Data: <strong>25/03/2025 17:35:25</strong></p>
+                    <p>Resumo: Cliente informou que a automação de pós-venda não está enviando as informações completas sobre os produtos, como nome, quantidade e variante.</p>
+                </div>
+            </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Quantidade de Chamados por Plataforma -->
+        <div class="container mx-auto px-6">
+        <section class="card p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
+                <i class="fas fa-list icon mr-2"></i>Quantidade de Chamados por Plataforma
+            </h2>
+            <ul class="list-disc pl-5 space-y-2">
+                <li class="text-lg">Shopify: <span class="font-bold text-purple-600">121 chamados (58.7%)</span></li>
+                <li class="text-lg">Visitors: <span class="font-bold text-purple-600">35 chamados (17%)</span></li>
+                <li class="text-lg">Yampi: <span class="font-bold text-purple-600">13 chamados (6.3%)</span></li>
+                <li class="text-lg">Nuvemshop: <span class="font-bold text-purple-600">24 chamados (11.7%)</span></li>
+                <li class="text-lg">Woocommerce: <span class="font-bold text-purple-600">7 chamados (3.4%)</span></li>
+                <li class="text-lg">Unicopag / LPQV: <span class="font-bold text-purple-600">6 chamados (1.9%)</span></li>
+            </ul>
+            <p class="mt-4 text-sm text-gray-600">
+                <strong>Observação:</strong> A grande maioria dos chamados está concentrada na plataforma Shopify, indicando maior volume de dúvidas e problemas nesta área.
+            </p>
+        </section>
+        </div>
+                          
+        <!-- Relatório Detalhado -->
+        <div class="container mx-auto px-6">
+        <section class="card p-6 mb-6 bg-gray-50 border border-gray-200 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600 flex items-center">
+                <i class="fas fa-info-circle icon mr-2"></i>Relatório Detalhado de Chamados
+            </h2>
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg">Resumo dos Chamados Encerrados e das Dúvidas do Mês</h3>
+                <h4 class="font-semibold mt-4 text-md">1. Resumo Geral dos Chamados</h4>
+                <p class="text-sm">Neste mês, os chamados se dividiram principalmente entre dúvidas e solicitações relacionadas a:</p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li class="text-gray-800"><strong>Problemas com Rastreios Desatualizados:</strong> Diversos clientes enfrentaram dificuldades com rastreios desatualizados em suas plataformas de e-commerce, principalmente na integração com o Único e Shopify.</li>
+                    <li class="text-gray-800"><strong>Integração com Plataformas de E-commerce:</strong> Muitos clientes relataram dificuldades na integração de suas lojas com o Único, Shopify, WooCommerce e outras plataformas. As principais queixas incluíram problemas na sincronização de carrinhos, pedidos e status de pagamento.</li>
+                    <li class="text-gray-800"><strong>Falhas na Automação de WhatsApp:</strong> Vários chamados envolveram dificuldades no envio de mensagens automáticas via WhatsApp, incluindo mensagens de rastreio e de pós-venda. Os clientes informaram que as mensagens não estavam sendo disparadas ou estavam com falhas de configuração.</li>
+                    <li class="text-gray-800"><strong>Notas Fiscais (NFs):</strong> Alguns clientes reportaram dificuldades com a emissão e atualização de Notas Fiscais, o que impediu o fechamento de faturas e a emissão correta dos documentos fiscais.</li>
+                    <li class="text-gray-800"><strong>Pedidos Estornados ou Cancelados:</strong> Houve também um número de chamados relacionados a pedidos com status de estorno ou cancelamento, com clientes questionando divergências nos valores ou falhas no processamento dos estornos.</li>
+                </ul>
+                <p class="mt-4 text-sm">A equipe de suporte lidou com <strong class="text-purple-600">206 chamados</strong> no total, resolvendo questões variadas.</p>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-semibold">2. Detalhamento por Categoria</h4>
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Rastreios Desatualizados (27 Chamados)</h5>
+                    <p>Resumo: Diversos clientes estão enfrentando problemas com rastreios desatualizados. Embora as movimentações estejam ocorrendo nas transportadoras, os dados não são refletidos nas plataformas de rastreamento como Único, Shopify, e outros.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #71543: Cliente informou que o pedido integrado na Único não tem a movimentação atualizada.</li>
+                        <li>Chamado #83594: Cliente com rastreio desatualizado.</li>
+                        <li>Chamado #77954: Cliente questionando informações de rastreio desatualizados.</li>
+                        <li>Chamado #83581: Rastreio desatualizado da Shopee.</li>
+                        <li>Chamado #82868: Cliente tem rastreios desatualizados e pediu por atualização.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Problemas com Integração de Plataformas (25 Chamados)</h5>
+                    <p>Resumo: Muitos clientes têm dificuldades com a integração de suas lojas nas plataformas e integrações de contas de ADS. As questões variam desde falhas na integração até problemas de sincronização de carrinhos e dados com o checkout.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #83556: Cliente questionando a integração com Shopify.</li>
+                        <li>Chamado #83595: Cliente reportando falhas na integração com o Yampi.</li>
+                        <li>Chamado #48243: Cliente com dificuldades de integração com o Facebook Ads e Shopify.</li>
+                        <li>Chamado #83553: Cliente com falhas na integração do carrinho abandonados.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h5 class="font-semibold mt-4">Problemas com Automação de WhatsApp (20 Chamados)</h5>
+                    <p>Resumo: Vários clientes estão enfrentando dificuldades com a automação de mensagens via WhatsApp, principalmente em relação ao envio de mensagens, e casos com a Extensão. Além disso, há falhas em disparos de mensagens e a Extensão que não está funcionando na nova atualização.</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Casos Relacionados:</strong></li>
+                        <li>Chamado #83577: Cliente informou que as mensagens da automação de WhatsApp não estavam sendo enviadas.</li>
+                        <li>Chamado #83581: Cliente questionando sobre mensagens de WhatsApp que não estavam sendo disparadas.</li>
+                        <li>Chamado #83552: Cliente com dificuldades para configurar a automação de WhatsApp.</li>
+                        <li>Chamado #83559: Problema de integração de WhatsApp para disparos de mensagens.</li>
+                        <li>Chamado #83178: Cliente com dúvidas sobre a automação do WhatsApp.</li>
+                    </ul>
+                </div>
+        </section>
+        </div>
+
+        <!-- Seção para Sugestões da Semana -->
+        <section class="container mx-auto p-6 mb-6 bg-white shadow-lg rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                <i class="fas fa-lightbulb icon"></i> Sugestões da Semana
+            </h2>
+            <p class="text-gray-700">Nesta semana, foram registradas cerca de <strong>2</strong> sugestões/ideias dos clientes. Confira um resumo abaixo:</p>
+            <div class="bg-gray-100 p-4 rounded-lg mb-4 mt-6">
+                <h4 class="font-semibold mt-4 text-purple-500 mb-3">Sugestões:</h4>
+                <ul class="list-disc pl-5">
+                    <li class="mb-3"><strong>ID: #82504:</strong> Cliente Sugeriu uma mensagem de Rastreio - Postado assim que o código é modificado.</li>
+                    <li class="mb-3"><strong>ID: #27978:</strong> Adicionar a tag <code>[cpf_cliente]</code> para mensagens da automação de WhatsApp.</li>
+                    <li class="mb-3"><strong>ID: #82496:</strong> Adicionar uma funcionalidade para permitir a integração com a plataforma Vega no checkout.</li>
+                    <li class="mb-3"><strong>ID: #83503:</strong> Adicionar a funcionalidade de chatbot dentro da plataforma para facilitar o atendimento ao cliente.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Função para criar gráficos
+        const createChart = (ctx, type, data, options) => {
+            return new Chart(ctx, {
+                type: type,
+                data: data,
+                options: options
+            });
+        };
+
+        // Dados e configurações dos gráficos
+        const chartsData = {
+            chamados: {
+                labels: ['Erro - Rastreio', 'Erro - Integração/Sincronização', 'Dúvida - Assinatura', 'Erro - Dashboard', 'Erro - E-mail'],
+                datasets: [{
+                    label: 'Chamados por Tipo',
+                    data: [17, 3, 3, 2, 2],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['Dúvida - WhatsApp Automação', 'Dúvida - Integração de Plataforma', 'Dúvida - Rastreio', 'Dúvida - Assinatura', 'Dúvida - Config Pendente'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [25, 20, 20, 11, 9],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            totalChamados: {
+                labels: ['Atendimentos', 'Chamado Aberto', 'Chamado Encerrado'],
+                datasets: [{
+                    label: 'Total de Chamados',
+                    data: [164, 6, 36],
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+
+        // Configurações dos gráficos
+        const chartsConfig = {
+            chamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            atendimentos: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            totalChamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Renderiza os gráficos
+        const ctxChamados = document.getElementById('chamadosChart').getContext('2d');
+        const ctxAtendimentos = document.getElementById('atendimentosChart').getContext('2d');
+        const ctxTotalChamados = document.getElementById('totalChamadosChart').getContext('2d');
+
+        createChart(ctxChamados, chartsConfig.chamados.type, chartsData.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentos, chartsConfig.atendimentos.type, chartsData.atendimentos, chartsConfig.atendimentos.options);
+        createChart(ctxTotalChamados, chartsConfig.totalChamados.type, chartsData.totalChamados, chartsConfig.totalChamados.options);
+
+        // Função para alternar entre os gráficos
+        const showChart = (chartId) => {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(chartId).classList.add('active');
+        };
+
+        // Eventos de clique nos botões
+        document.getElementById('btnChamados').addEventListener('click', () => showChart('chartChamados'));
+        document.getElementById('btnAtendimentos').addEventListener('click', () => showChart('chartAtendimentos'));
+        document.getElementById('btnTotalChamados').addEventListener('click', () => showChart('chartTotalChamados'));
+
+        // Dados e configurações dos gráficos adicionais
+        const chartsDataCategoria = {
+            chamados: {
+                labels: ['Shopify', 'Nuvemshop', 'Cartx', 'Yampi', 'Woocommerce'],
+                datasets: [{
+                    label: 'Chamados por Categoria',
+                    data: [154, 10, 8, 10, 6],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['WhatsApp Automação', 'Integração de Plataforma', 'Rastreio', 'Assinatura', 'Config Pendente'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [23, 15, 19, 20, 7],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+        // Renderiza os gráficos adicionais
+        const ctxChamadosCategoria = document.getElementById('chamadosCategoriaChart').getContext('2d');
+        const ctxAtendimentosCategoria = document.getElementById('atendimentosCategoriaChart').getContext('2d');
+
+        createChart(ctxChamadosCategoria, 'bar', chartsDataCategoria.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentosCategoria, 'bar', chartsDataCategoria.atendimentos, chartsConfig.atendimentos.options);
+    </script>
+</body>
+</html>
+                   
