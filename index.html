@@ -109,7 +109,7 @@
                     { nome: "Janeiro", analise: "jan-analise.html", semanas: ["jan-semana1.html", "jan-semana2.html", "jan-semana3.html", "jan-semana4.html"] },
                     { nome: "Fevereiro", analise: "fmes.html", semanas: ["fev-semana1.html", "fev-semana2.html", "jterceira.html", "jquarta.html"] },
                     { nome: "Março", analise: "mmes.html", semanas: ["mprimeira.html", "msegunda.html", "mterceira.html", "mquarta.html"] },
-                    { nome: "Abril", analise: "abr-analise.html", semanas: ["abr-semana1.html", "abr-semana2.html", "abr-semana3.html", "abr-semana4.html"] },
+                    { nome: "Abril", analise: "aprimeira.html", semanas: ["abr-semana1.html", "abr-semana2.html", "abr-semana3.html", "abr-semana4.html"] },
                     { nome: "Maio", analise: "mai-analise.html", semanas: ["mai-semana1.html", "mai-semana2.html", "mai-semana3.html", "mai-semana4.html"] },
                     { nome: "Junho", analise: "jun-analise.html", semanas: ["jun-semana1.html", "jun-semana2.html", "jun-semana3.html", "jun-semana4.html"] }
                 ];
@@ -150,10 +150,10 @@
 
         // Gráfico de linha para chamados por mês
         const mensalData = {
-            labels: ["Janeiro", "Fevereiro", "Março"],
+            labels: ["Janeiro", "Fevereiro", "Março","Abril"],
             datasets: [{
                 label: "Atendimentos e Chamados",
-                data: [729, 840, 857],
+                data: [729, 840, 857, 0],
                 borderColor: "#0099ff",
                 fill: false,
                 tension: 0.3
@@ -169,6 +169,7 @@
             "Janeiro": [174, 160, 192, 203],
             "Fevereiro": [184, 215, 212, 229],
             "Março": [141, 264, 201, 206]
+            "Abril": [209, 0, 0, 0]
         };
 
         function atualizarGraficoSemanal() {
