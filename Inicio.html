@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unico Drop - Página Inicial</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Poppins', sans-serif;
+      color: #334155;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+      margin-bottom: 20px;
+      padding: 24px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover::after {
+      transform: scaleX(1);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    
+    .btn-primary:hover::after {
+      transform: translateX(100%);
+    }
+    
+    .progress-bar {
+      height: 10px;
+      border-radius: 5px;
+      background-color: #e2e8f0;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #10b981, #059669);
+      transition: width 1s ease;
+    }
+    
+    .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-card {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: white;
+    }
+    
+    .icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      margin-right: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+    }
+    
+    .status-item:hover {
+      transform: translateX(5px);
+    }
+    
+    .status-danger {
+      background-color: #fee2e2;
+      color: #ef4444;
+      border-left: 4px solid #ef4444;
+    }
+    
+    .status-warning {
+      background-color: #fef3c7;
+      color: #f59e0b;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .status-success {
+      background-color: #d1fae5;
+      color: #10b981;
+      border-left: 4px solid #10b981;
+    }
+    
+    .extension-link {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s ease;
+      border: 1px solid #bfdbfe;
+    }
+    
+    .extension-link:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    
+    .card-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      border-radius: 3px;
+    }
+    
+    .notification-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #ef4444;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    
+    .btn-connect {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+    
+    .btn-recharge {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    
+    .status-indicator {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .status-green {
+      background-color: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+    
+    .status-yellow {
+      background-color: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+    }
+    
+    .status-red {
+      background-color: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+    }
+    
+    .alert-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background-color: #fee2e2;
+      margin-bottom: 12px;
+      border-left: 4px solid #ef4444;
+    }
+    
+    .nps-scale {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+    }
+    
+    .nps-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .nps-number:hover {
+      transform: scale(1.1);
+    }
+    
+    .nps-detractor {
+      background-color: #fee2e2;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+    }
+    
+    .nps-passive {
+      background-color: #fef3c7;
+      color: #f59e0b;
+      border: 1px solid #fde68a;
+    }
+    
+    .nps-promoter {
+      background-color: #d1fae5;
+      color: #10b981;
+      border: 1px solid #a7f3d0;
+    }
+    
+    .nps-selected {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+    }
+    
+    .achievement-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      background-color: #f1f5f9;
+      color: #94a3b8;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .achievement-completed {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: white;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #10b981;
+    }
+    
+    .achievement-progress-track {
+      position: relative;
+      height: 8px;
+      border-radius: 4px;
+      background-color: #e2e8f0;
+      margin: 20px 0;
+    }
+    
+    .achievement-progress-bar {
+      position: absolute;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #60a5fa, #3b82f6);
+      width: 65%;
+      transition: width 1s ease;
+    }
+    
+    .achievement-progress-icons {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-top: -14px;
+    }
+    
+    .achievement-checkpoint {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background-color: white;
+      border: 2px solid #e2e8f0;
+      z-index: 1;
+    }
+    
+    .achievement-checkpoint.completed {
+      border-color: #3b82f6;
+      background-color: #3b82f6;
+      color: white;
+    }
+    
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      transition: all 0.2s ease;
+    }
+    
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+    
+    .transaction-item:hover {
+      background-color: #f8fafc;
+    }
+    
+    .transaction-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .transaction-icon.income {
+      background-color: #dcfce7;
+      color: #16a34a;
+    }
+    
+    .transaction-icon.expense {
+      background-color: #fee2e2;
+      color: #dc2626;
+    }
+    
+    .transaction-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .transaction-action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f1f5f9;
+      color: #64748b;
+      transition: all 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .transaction-action-btn:hover {
+      background-color: #e2e8f0;
+      color: #334155;
+    }
+  </style>
+</head>
+<body class="p-6">
+
+  <!-- Header -->
+  <header class="card header-card mb-8">
+    <div class="max-w-2xl mx-auto text-center">
+      <h1 class="text-4xl font-bold mb-4">Bem-vindo, Usuário! 🎉</h1>
+      <p class="text-xl opacity-90 mb-6">Você teve <strong class="bg-white bg-opacity-20 px-2 py-1 rounded">100% mais vendas</strong> hoje. Analise seu funil.</p>
+      <div class="flex justify-center space-x-4">
+        <button class="btn-primary flex items-center">
+          <i class="fas fa-chart-line mr-2"></i> Ver Vendas
+        </button>
+        <button class="btn-primary flex items-center" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+          <i class="fas fa-tasks mr-2"></i> Ver Tarefas
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <!-- Configurações Pendentes -->
+    <section class="card">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold flex items-center">
+          <i class="fas fa-exclamation-triangle text-yellow-500 mr-3 text-2xl"></i>
+          Configurações Pendentes
+        </h2>
+        <span class="bg-yellow-100 text-yellow-800 py-1 px-3 rounded-full text-sm font-medium">3 pendentes</span>
+      </div>
+      
+      <p class="text-gray-600 mb-4">Você precisa finalizar algumas configurações para aproveitar ao máximo sua plataforma.</p>
+      
+      <div class="space-y-3 mb-4">
+        <!-- 2. WhatsApp Desconectado -->
+        <div class="alert-item">
+          <div class="flex-shrink-0 mr-4">
+            <div class="bg-white p-2 rounded-full">
+              <i class="fab fa-whatsapp text-2xl text-gray-400 relative">
+                <i class="fas fa-times text-red-500 text-sm absolute bottom-0 right-0 bg-white rounded-full p-0.5"></i>
+              </i>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">WhatsApp Desconectado</h3>
+            <p class="text-sm text-gray-600">Reconecte sua conta para continuar enviando mensagens.</p>
+          </div>
+          <button class="btn-primary btn-connect text-sm">
+            <i class="fas fa-plug mr-2"></i>
+            Conectar
+          </button>
+        </div>
+        
+        <!-- 3. Créditos Esgotados -->
+        <div class="alert-item" style="background-color: #fef3c7; border-left-color: #f59e0b;">
+          <div class="flex-shrink-0 mr-4">
+            <div class="bg-white p-2 rounded-full">
+              <div class="relative">
+                <i class="fas fa-coins text-2xl text-yellow-500"></i>
+                <span class="absolute -bottom-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">0</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-medium text-gray-800">Créditos Esgotados</h3>
+            <p class="text-sm text-gray-600">Recarregue seus créditos para continuar utilizando os serviços.</p>
+          </div>
+          <button class="btn-primary btn-recharge text-sm">
+            <i class="fas fa-plus-circle mr-2"></i>
+            Recarregar
+          </button>
+        </div>
+      </div>
+      
+      <button class="btn-primary w-full">
+        <i class="fas fa-cog mr-2"></i>
+        Acessar Configurações
+      </button>
+    </section>
+
+    <!-- Status do Sistema -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-red-100 text-red-500">
+          <i class="fas fa-server"></i>
+        </div>
+        Status do Sistema
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+          <span class="status-indicator status-green flex-shrink-0"></span>
+          <div class="ml-2 flex-1">
+            <p class="font-medium text-sm overflow-hidden whitespace-nowrap text-ellipsis">Automação</p>
+            <p class="text-xs text-gray-500">Operacional</p>
+          </div>
+        </div>
+        
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+          <span class="status-indicator status-yellow"></span>
+          <div>
+            <p class="font-medium">Servidores</p>
+            <p class="text-xs text-gray-500">Atenção</p>
+          </div>
+        </div>
+        
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center">
+          <span class="status-indicator status-red"></span>
+          <div>
+            <p class="font-medium">Credenciais</p>
+            <p class="text-xs text-gray-500">Problemas</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+        <div class="flex items-start">
+          <i class="fas fa-info-circle text-blue-500 mt-1 mr-3"></i>
+          <div>
+            <p class="font-medium text-blue-800">Manutenção Programada</p>
+            <p class="text-sm text-blue-700 mt-1">Haverá uma manutenção programada no dia 15/04 das 23h às 05h.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status da Assinatura -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-green-100 text-green-500">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        Status da Assinatura
+      </h2>
+      
+      <div class="bg-gradient-to-r from-purple-100 to-indigo-100 p-4 rounded-lg mb-4">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xl font-bold text-purple-800">Plano Padrão</p>
+            <p class="text-sm text-purple-700 mt-1">Válido até 12/05/2025</p>
+          </div>
+          <div class="bg-green-100 text-green-800 font-medium py-1 px-3 rounded-full text-xs">
+            Ativo
+          </div>
+        </div>
+        
+        <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div class="bg-white bg-opacity-50 rounded p-2 text-center">
+            <p class="text-xs text-gray-600">Mensagens</p>
+            <p class="font-bold text-purple-800">∞</p>
+          </div>
+          <div class="bg-white bg-opacity-50 rounded p-2 text-center">
+            <p class="text-xs text-gray-600">Usuários</p>
+            <p class="font-bold text-purple-800">10</p>
+          </div>
+          <div class="bg-white bg-opacity-50 rounded p-2 text-center">
+            <p class="text-xs text-gray-600">Automações</p>
+            <p class="font-bold text-purple-800">25</p>
+          </div>
+          <div class="bg-white bg-opacity-50 rounded p-2 text-center">
+            <p class="text-xs text-gray-600">Contatos</p>
+            <p class="font-bold text-purple-800">10k</p>
+          </div>
+        </div>
+      </div>
+      
+      <p class="text-sm text-gray-600 mb-4">Sua próxima cobrança será de <strong>R$ 99,90</strong> em 12/05/2025.</p>
+      
+      <div class="flex space-x-2">
+        <button class="btn-primary flex-1">
+          <i class="fas fa-sync-alt mr-2"></i>
+          Renovar Assinatura
+        </button>
+        <button class="btn-primary flex-1" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+          <i class="fas fa-arrow-up mr-2"></i>
+          Upgrade
+        </button>
+      </div>
+    </section>
+
+    <!-- Sugestões -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-purple-100 text-purple-500">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        Sugestões
+      </h2>
+      <p class="text-gray-600 mb-4">Envie sugestões e ganhe recompensas!</p>
+      
+      <div class="bg-purple-50 p-4 rounded-lg mb-4">
+        <p class="text-purple-800 font-medium">Suas ideias são valiosas!</p>
+        <p class="text-sm text-purple-600 mt-1">A cada sugestão implementada, você ganha 10 créditos extras.</p>
+      </div>
+      
+      <button class="btn-primary w-full flex items-center justify-center" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+        <i class="fas fa-gift mr-2"></i> Enviar Sugestão
+      </button>
+    </section>
+
+    <!-- Ranking de Uso -->
+    <section class="card overflow-hidden hover:shadow-lg transition-all duration-300">
+      <h2 class="card-title">
+        <div class="icon-circle bg-orange-100 text-orange-500 animate__animated animate__fadeIn">
+          <i class="fas fa-trophy"></i>
+        </div>
+        Ranking de Uso
+      </h2>
+      
+      <div class="flex items-center justify-between my-6">
+        <div class="flex flex-col items-center transform hover:scale-105 transition-all duration-300">
+          <div class="relative">
+            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center flex-col shadow-md hover:shadow-lg transition-all">
+              <span class="text-gray-600 text-sm font-medium">#8</span>
+              <span class="text-xs text-gray-500">1.500 pts</span>
+            </div>
+            <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-600 shadow-md">Anterior</span>
+          </div>
+        </div>
+        
+        <div class="flex flex-col items-center z-10">
+          <div class="relative">
+            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center flex-col text-orange-600 border-4 border-orange-300 shadow-xl transform hover:scale-110 transition-all duration-300">
+              <i class="fas fa-crown text-yellow-500 mb-1 text-xl animate-pulse"></i>
+              <span class="text-3xl font-bold">#7</span>
+              <span class="text-sm font-medium">1.750 pts</span>
+            </div>
+            <div class="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs rounded-full h-8 w-8 flex items-center justify-center animate-bounce shadow-lg">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 text-xs bg-orange-200 px-4 py-1 rounded-full text-orange-700 font-medium shadow-md">Atual</span>
+          </div>
+        </div>
+        
+        <div class="flex flex-col items-center transform hover:scale-105 transition-all duration-300">
+          <div class="relative">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center flex-col text-orange-500 border-2 border-dashed border-orange-300 hover:border-orange-400 transition-all">
+              <span class="text-orange-600 text-sm font-medium">#6</span>
+              <span class="text-xs">2.000 pts</span>
+            </div>
+            <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-xs bg-orange-100 px-3 py-1 rounded-full text-orange-600 shadow-md">Próximo</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-gradient-to-r from-orange-50 via-orange-100 to-orange-50 p-5 rounded-xl mb-5 shadow-inner">
+        <div class="flex items-center mb-3">
+          <i class="fas fa-fire text-orange-500 mr-2 text-lg animate-pulse"></i>
+          <p class="text-orange-800 font-semibold text-sm">Você está no TOP 10 dos usuários mais ativos!</p>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="flex justify-between items-center text-sm">
+            <div class="flex items-center">
+              <span class="bg-gradient-to-r from-orange-200 to-orange-300 text-orange-700 rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 shadow-md">6</span>
+              <span class="text-orange-700 font-medium">João S.</span>
+            </div>
+            <span class="font-medium bg-gradient-to-r from-orange-200 to-orange-300 text-orange-700 px-3 py-1 rounded-full text-xs shadow-md">2.000 pts</span>
+          </div>
+          
+          <div class="relative w-full">
+            <div class="w-full bg-orange-200 rounded-full h-4 shadow-inner">
+              <div class="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 h-4 rounded-full relative overflow-hidden" style="width: 87%">
+                <div class="absolute inset-0 bg-white opacity-20 animate-pulse"></div>
+                <div class="absolute inset-0 overflow-hidden">
+                  <div class="h-full w-full bg-gradient-to-r from-transparent via-white to-transparent opacity-20 animate-shine"></div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute right-0 top-0 h-4 border-l-2 border-dashed border-orange-700 flex flex-col items-center">
+              <span class="text-xs text-orange-700 mt-5 font-medium bg-orange-100 px-2 py-1 rounded-full shadow-sm">Meta</span>
+            </div>
+          </div>
+          
+          <div class="flex justify-between items-center flex-wrap bg-orange-50 p-3 rounded-lg shadow-sm">
+            <p class="text-sm text-orange-700"><i class="fas fa-info-circle mr-1 animate-pulse"></i> Faltam apenas <strong>250 pontos</strong> para subir</p>
+            <span class="text-xs bg-gradient-to-r from-orange-300 to-orange-400 text-orange-800 px-3 py-1 rounded-full shadow-md font-medium">87% concluído</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex space-x-3">
+        <button class="btn-primary flex-1 flex items-center justify-center py-3 text-sm shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, #f97316, #ea580c, #c2410c);">
+          <i class="fas fa-chart-bar mr-2"></i> Ver Detalhes
+        </button>
+        <button class="flex-1 border-2 border-orange-300 text-orange-600 rounded-lg py-3 hover:bg-orange-50 transition-colors flex items-center justify-center text-sm shadow-md hover:shadow-lg hover:border-orange-400">
+          <i class="fas fa-share-alt mr-2"></i> Compartilhar
+        </button>
+      </div>
+      
+      <div class="mt-5 text-center">
+        <a href="#" class="text-sm text-orange-500 hover:text-orange-600 hover:underline flex items-center justify-center transition-colors bg-orange-50 py-2 px-4 rounded-full mx-auto w-max shadow-sm hover:shadow-md">
+          <i class="fas fa-question-circle mr-2 animate-bounce"></i> Como ganhar mais pontos?
+        </a>
+      </div>
+    </section>
+    <!-- Análise de Vendas -->
+    <section class="card overflow-hidden hover:shadow-lg transition-all duration-300">
+      <h2 class="card-title">
+        <div class="icon-circle bg-teal-100 text-teal-500">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        Análise de Vendas
+      </h2>
+      
+      <div class="flex items-center justify-between mb-6 bg-gradient-to-r from-teal-50 to-teal-100 p-4 rounded-lg shadow-inner">
+        <div>
+          <p class="text-3xl font-bold text-teal-600 flex items-center">
+            <i class="fas fa-arrow-up text-sm mr-2"></i>
+            +10%
+          </p>
+          <p class="text-sm text-gray-600">vs. semana anterior</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xl font-semibold bg-gradient-to-r from-teal-500 to-teal-600 text-black py-1 px-3 rounded-lg shadow-md">R$ 12.450,00</p>
+          <p class="text-sm text-gray-600 mt-1">Total da semana</p>
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-sm font-semibold text-teal-700">Produtos Mais Vendidos</h3>
+          <span class="text-xs bg-teal-100 text-teal-600 px-2 py-1 rounded-full">Últimos 7 dias</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center p-2 bg-teal-50 rounded-lg">
+            <span class="text-sm font-medium">Camiseta Básica</span>
+            <div class="flex items-center">
+              <span class="text-xs mr-2">245 R$</span>
+              <div class="w-24 bg-teal-200 rounded-full h-2">
+                <div class="bg-teal-500 h-2 rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between items-center p-2 bg-teal-50 rounded-lg">
+            <span class="text-sm font-medium">Calça Jeans</span>
+            <div class="flex items-center">
+              <span class="text-xs mr-2">187 R$</span>
+              <div class="w-24 bg-teal-200 rounded-full h-2">
+                <div class="bg-teal-500 h-2 rounded-full" style="width: 65%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between items-center p-2 bg-teal-50 rounded-lg">
+            <span class="text-sm font-medium">Tênis Casual</span>
+            <div class="flex items-center">
+              <span class="text-xs mr-2">132 R$</span>
+              <div class="w-24 bg-teal-200 rounded-full h-2">
+                <div class="bg-teal-500 h-2 rounded-full" style="width: 45%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="h-40 bg-gradient-to-b from-teal-50 to-teal-100 rounded-xl flex items-end justify-between p-4 mb-5 shadow-inner">
+        <div class="w-10 bg-gradient-to-t from-teal-300 to-teal-200 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 40%">
+          <div class="text-xs text-center text-teal-700 mt-2 font-medium">Seg</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-400 to-teal-300 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 60%">
+          <div class="text-xs text-center text-teal-700 mt-2 font-medium">Ter</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-500 to-teal-400 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 30%">
+          <div class="text-xs text-center text-teal-700 mt-2 font-medium">Qua</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-600 to-teal-500 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 80%">
+          <div class="text-xs text-center text-teal-100 mt-2 font-medium">Qui</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-700 to-teal-600 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 50%">
+          <div class="text-xs text-center text-teal-100 mt-2 font-medium">Sex</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-800 to-teal-700 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 70%">
+          <div class="text-xs text-center text-teal-100 mt-2 font-medium">Sáb</div>
+        </div>
+        <div class="w-10 bg-gradient-to-t from-teal-900 to-teal-800 rounded-t-lg shadow-lg hover:transform hover:scale-y-110 transition-all duration-300" style="height: 90%">
+          <div class="text-xs text-center text-teal-100 mt-2 font-medium">Dom</div>
+        </div>
+      </div>
+      
+      <div class="mb-5 bg-gradient-to-r from-teal-50 to-teal-100 p-4 rounded-lg shadow-inner">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-sm font-semibold text-teal-700">Receitas e Despesas</h3>
+          <span class="text-xs bg-teal-100 text-teal-600 px-2 py-1 rounded-full">Mês atual</span>
+        </div>
+        <div class="flex justify-between gap-3">
+          <div class="flex-1 bg-white p-3 rounded-lg shadow-md">
+            <div class="flex items-center mb-1">
+              <i class="fas fa-arrow-circle-up text-green-500 mr-2"></i>
+              <span class="text-sm font-medium text-gray-700">Receitas</span>
+            </div>
+            <p class="text-lg font-bold text-green-600">R$ 32.450,00</p>
+            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+              <div class="bg-green-500 h-1.5 rounded-full" style="width: 75%"></div>
+            </div>
+          </div>
+          <div class="flex-1 bg-white p-3 rounded-lg shadow-md">
+            <div class="flex items-center mb-1">
+              <i class="fas fa-arrow-circle-down text-red-500 mr-2"></i>
+              <span class="text-sm font-medium text-gray-700">Despesas</span>
+            </div>
+            <p class="text-lg font-bold text-red-600">R$ 18.320,00</p>
+            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+              <div class="bg-red-500 h-1.5 rounded-full" style="width: 45%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex flex-wrap gap-2 mb-4">
+        <div class="text-xs font-medium bg-teal-100 text-teal-700 px-3 py-1 rounded-full flex items-center cursor-pointer hover:bg-teal-200 transition-colors">
+          <i class="fas fa-filter mr-1"></i> Categoria
+          <i class="fas fa-chevron-down ml-1 text-teal-500 text-xs"></i>
+        </div>
+        <div class="text-xs font-medium bg-teal-100 text-teal-700 px-3 py-1 rounded-full flex items-center cursor-pointer hover:bg-teal-200 transition-colors">
+          <i class="fas fa-calendar-alt mr-1"></i> Período
+          <i class="fas fa-chevron-down ml-1 text-teal-500 text-xs"></i>
+        </div>
+        <div class="text-xs font-medium bg-teal-100 text-teal-700 px-3 py-1 rounded-full flex items-center cursor-pointer hover:bg-teal-200 transition-colors">
+          <i class="fas fa-tag mr-1"></i> Produtos
+          <i class="fas fa-chevron-down ml-1 text-teal-500 text-xs"></i>
+        </div>
+        <div class="text-xs font-medium bg-teal-100 text-teal-700 px-3 py-1 rounded-full flex items-center cursor-pointer hover:bg-teal-200 transition-colors">
+          <i class="fas fa-store mr-1"></i> Loja
+          <i class="fas fa-chevron-down ml-1 text-teal-500 text-xs"></i>
+        </div>
+      </div>
+      
+      <button class="btn-primary w-full flex items-center justify-center py-3 shadow-lg hover:shadow-xl transition-all" style="background: linear-gradient(135deg, #14b8a6, #0d9488, #0f766e);">
+        <i class="fas fa-file-alt mr-2"></i> Ver Relatório Completo
+      </button>
+    </section>
+    <!-- Links das Extensões -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-blue-100 text-blue-500">
+          <i class="fas fa-puzzle-piece"></i>
+        </div>
+        Links das Extensões
+      </h2>
+      
+      <div class="grid grid-cols-2 gap-4 mt-4">
+        <a href="#" class="extension-link">
+          <i class="fab fa-whatsapp text-2xl text-green-500 mr-3"></i>
+          <div>
+            <p class="font-medium">Zap</p>
+            <p class="text-xs text-gray-500">Integração WhatsApp</p>
+          </div>
+        </a>
+        
+        <a href="#" class="extension-link">
+          <i class="fas fa-map-marker-alt text-2xl text-red-500 mr-3"></i>
+          <div>
+            <p class="font-medium">Rastreio</p>
+            <p class="text-xs text-gray-500">Rastreamento de pedidos</p>
+          </div>
+        </a>
+        
+        <a href="#" class="extension-link">
+          <i class="fas fa-plug text-2xl text-purple-500 mr-3"></i>
+          <div>
+            <p class="font-medium">Plugin de rastreio</p>
+            <p class="text-xs text-gray-500">Extensões avançadas</p>
+          </div>
+        </a>
+        
+        <a href="#" class="extension-link">
+          <i class="fas fa-shopping-bag text-2xl text-orange-500 mr-3"></i>
+          <div>
+            <p class="font-medium">AliExpress</p>
+            <p class="text-xs text-gray-500">Integração de Custo</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Sistema de Indicação -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-purple-100 text-purple-500">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        Sistema de Indicação e Afiliados
+      </h2>
+      
+      <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg mb-4">
+        <p class="text-purple-800 font-medium">A cada 3 amigos indicados, você ganha 1 mês grátis!</p>
+        <div class="flex items-center mt-2">
+          <div class="flex -space-x-2 mr-3">
+            <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center text-purple-600 border-2 border-white">2</div>
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 border-2 border-white">?</div>
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 border-2 border-white">?</div>
+          </div>
+          <div class="text-sm text-purple-600">2/3 indicações</div>
+        </div>
+      </div>
+      
+      <div class="bg-indigo-50 p-4 rounded-lg mb-4">
+        <p class="text-indigo-800 font-medium">Seu link de afiliado:</p>
+        <div class="flex items-center mt-2 bg-white rounded-lg p-2 border border-indigo-100">
+          <input type="text" value="https://app.exemplo.com/ref/12345" class="w-full text-sm text-gray-700 bg-transparent border-none focus:outline-none" readonly>
+          <button class="ml-2 text-indigo-600 hover:text-indigo-800">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+        <p class="text-xs text-indigo-600 mt-2">Ganhe 10% de comissão em cada venda realizada através do seu link!</p>
+      </div>
+      
+      <div class="bg-purple-50 p-4 rounded-lg mb-4">
+        <p class="text-purple-800 font-medium">Benefícios do Programa de Afiliados:</p>
+        <ul class="mt-2 space-y-2 text-sm text-purple-700">
+          <li class="flex items-center">
+            <i class="fas fa-check-circle text-purple-500 mr-2"></i>
+            Desconto em renovação de saldo e assinatura
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-check-circle text-purple-500 mr-2"></i>
+            Materiais promocionais exclusivos
+          </li>
+        </ul>
+      </div>
+      
+      <ul class="mt-4">
+        <li class="flex items-center justify-between mb-3 pb-3 border-b border-gray-100">
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center text-purple-600 font-medium mr-3">JO</div>
+            <div>
+              <p class="font-medium">Joana</p>
+              <p class="text-gray-500 text-xs">21 Jul | 08:20-10:30</p>
+            </div>
+          </div>
+          <span class="badge bg-green-100 text-green-800">Completa</span>
+        </li>
+        
+        <li class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-blue-600 font-medium mr-3">JG</div>
+            <div>
+              <p class="font-medium">Jorge</p>
+              <p class="text-gray-500 text-xs">21 Jul | 08:20-10:30</p>
+            </div>
+          </div>
+          <span class="badge bg-blue-100 text-blue-800">Andamento</span>
+        </li>
+      </ul>
+      <button class="btn-primary w-full mt-4 flex items-center justify-center" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+        <i class="fas fa-share-alt mr-2"></i> Indicar Amigos
+      </button>
+    </section>
+
+    <!-- Últimas Atualizações -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-yellow-100 text-yellow-500">
+          <i class="fas fa-bell"></i>
+        </div>
+        Últimas Atualizações
+        <span class="notification-dot"></span>
+      </h2>
+      
+      <div class="space-y-4 mt-4">
+        <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
+          <div class="flex justify-between">
+            <p class="font-medium text-blue-800">Nova funcionalidade</p>
+            <p class="text-xs text-blue-600">Hoje</p>
+          </div>
+          <p class="text-sm text-blue-700 mt-1">Agora você pode enviar mensagens em massa!</p>
+        </div>
+        
+        <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
+          <div class="flex justify-between">
+            <p class="font-medium text-green-800">Melhoria</p>
+            <p class="text-xs text-green-600">Ontem</p>
+          </div>
+          <p class="text-sm text-green-700 mt-1">Melhoramos a velocidade de carregamento em 50%</p>
+        </div>
+        
+        <div class="bg-purple-50 p-3 rounded-lg border-l-4 border-purple-500">
+          <div class="flex justify-between">
+            <p class="font-medium text-purple-800">Promoção</p>
+            <p class="text-xs text-purple-600">3 dias atrás</p>
+          </div>
+          <p class="text-sm text-purple-700 mt-1">50% de desconto na renovação anual até 30/05</p>
+        </div>
+      </div>
+      
+      <button class="btn-primary w-full mt-4 flex items-center justify-center" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
+        <i class="fas fa-external-link-alt mr-2"></i> Ver Todas
+      </button>
+    </section>
+
+    <!-- NPS (Net Promoter Score) -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-indigo-100 text-indigo-500">
+          <i class="fas fa-smile"></i>
+        </div>
+        NPS (Net Promoter Score)
+      </h2>
+      
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <p class="text-2xl font-bold text-indigo-600">8.7</p>
+          <p class="text-sm text-gray-500">Score atual</p>
+        </div>
+        <div class="flex items-center text-green-500">
+          <i class="fas fa-arrow-up mr-1"></i>
+          <span>+0.5 pts</span>
+        </div>
+      </div>
+      
+      <p class="text-sm text-gray-600 mb-2">Quão provável é que você recomende nosso produto?</p>
+      
+      <div class="nps-scale">
+        <div class="nps-number nps-detractor">0</div>
+        <div class="nps-number nps-detractor">1</div>
+        <div class="nps-number nps-detractor">2</div>
+        <div class="nps-number nps-detractor">3</div>
+        <div class="nps-number nps-detractor">4</div>
+        <div class="nps-number nps-detractor">5</div>
+        <div class="nps-number nps-detractor">6</div>
+        <div class="nps-number nps-passive">7</div>
+        <div class="nps-number nps-passive">8</div>
+        <div class="nps-number nps-promoter nps-selected">9</div>
+        <div class="nps-number nps-promoter">10</div>
+      </div>
+      
+      <div class="flex justify-between text-xs text-gray-500 mb-4">
+        <span>Pouco provável</span>
+        <span>Muito provável</span>
+      </div>
+      
+      <div class="bg-indigo-50 p-3 rounded-lg mb-4">
+        <p class="text-sm text-indigo-700 flex items-start">
+          <i class="fas fa-info-circle mt-0.5 mr-2 text-indigo-500"></i>
+          O NPS mede a lealdade do cliente. Scores acima de 8 são considerados excelentes e indicam que nossos clientes são promotores da nossa marca!
+        </p>
+      </div>
+      
+      <button class="btn-primary w-full flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <i class="fas fa-comment-dots mr-2"></i> Fornecer Feedback
+      </button>
+    </section>
+
+    <!-- Painel de Conquistas -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-amber-100 text-amber-500">
+          <i class="fas fa-trophy"></i>
+        </div>
+        Painel de Conquistas
+      </h2>
+      
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <p class="text-xl font-semibold text-amber-600">Nível 3</p>
+          <p class="text-sm text-gray-500">Vendedor Iniciante</p>
+        </div>
+        <div class="flex items-center text-amber-600">
+          <p class="font-medium">4 de 7 conquistas</p>
+          <div class="ml-2 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700">
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+      </div>
+      
+      <div class="achievement-progress-track">
+        <div class="achievement-progress-bar"></div>
+      </div>
+      
+      <div class="achievement-progress-icons">
+        <div class="achievement-checkpoint completed">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="achievement-checkpoint completed">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="achievement-checkpoint completed">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="achievement-checkpoint completed">
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="achievement-checkpoint">5</div>
+        <div class="achievement-checkpoint">6</div>
+        <div class="achievement-checkpoint">7</div>
+      </div>
+      
+      <p class="text-sm text-gray-600 mb-4 mt-3">Complete mais <strong>3 conquistas</strong> para desbloquear o próximo nível e receber novos benefícios</p>
+      
+      <div class="space-y-4 mt-5">
+        <div class="flex items-center bg-white p-3 rounded-lg border border-gray-100 hover:border-amber-200 transition">
+          <div class="achievement-icon achievement-completed">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="font-medium">Perfil Completo</p>
+              <span class="badge bg-green-100 text-green-800">Completo</span>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-xs text-gray-500">Preencha todos os dados da conta</p>
+              <p class="text-xs text-amber-600">+50 pontos</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center bg-white p-3 rounded-lg border border-gray-100 hover:border-amber-200 transition">
+          <div class="achievement-icon achievement-completed">
+            <i class="fas fa-comment"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="font-medium">Automação</p>
+              <span class="badge bg-green-100 text-green-800">Completo</span>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-xs text-gray-500">Envie 100 mensagens</p>
+              <p class="text-xs text-amber-600">+100 pontos</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center bg-white p-3 rounded-lg border border-gray-100 hover:border-amber-200 transition">
+          <div class="achievement-icon achievement-completed">
+            <i class="fas fa-store"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="font-medium">Primeira Venda</p>
+              <span class="badge bg-green-100 text-green-800">Completo</span>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-xs text-gray-500">Realize sua primeira venda</p>
+              <p class="text-xs text-amber-600">+200 pontos</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center bg-white p-3 rounded-lg border border-gray-100 hover:border-amber-200 transition">
+          <div class="achievement-icon achievement-completed">
+            <i class="fas fa-truck-loading"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="font-medium">Primeiro Rastreio</p>
+              <span class="badge bg-green-100 text-green-800">Completo</span>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-xs text-gray-500">Adicione o seu primeiro rastreio</p>
+              <p class="text-xs text-amber-600">+150 pontos</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center bg-white p-3 rounded-lg border border-gray-100 hover:border-amber-200 transition">
+          <div class="achievement-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between">
+              <p class="font-medium">Vendedor Experiente</p>
+              <span class="badge bg-blue-100 text-blue-800">60%</span>
+            </div>
+            <div class="flex justify-between">
+              <p class="text-xs text-gray-500">Alcance R$ 10.000 em vendas</p>
+              <p class="text-xs text-amber-600">+500 pontos</p>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+              <div class="bg-blue-600 h-1.5 rounded-full" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-amber-50 p-4 rounded-lg mt-4 mb-4 border-l-4 border-amber-500">
+        <p class="flex items-start text-sm text-amber-800">
+          <i class="fas fa-gift mt-1 mr-2"></i>
+          <span>
+            <strong>Próximas recompensas:</strong> Ao atingir o Nível 4, você receberá 500 créditos bônus!
+          </span>
+        </p>
+      </div>
+      
+      <button class="btn-primary w-full flex items-center justify-center" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+        <i class="fas fa-trophy mr-2"></i> Ver Todas as Conquistas
+      </button>
+    </section>
+
+    <!-- Lançamentos Recorrentes (Data de Hoje) -->
+    <section class="card">
+      <h2 class="card-title">
+        <div class="icon-circle bg-blue-100 text-blue-500">
+          <i class="fas fa-calendar-day"></i>
+        </div>
+        Lançamentos Recorrentes
+        <span class="ml-2 bg-blue-100 text-blue-700 text-xs py-1 px-2 rounded-full">Hoje</span>
+      </h2>
+      
+      <div class="mb-4">
+        <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center">
+            <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>
+            <p class="text-sm font-medium text-gray-700">11 de abril, 2025</p>
+          </div>
+          <span class="bg-blue-50 text-blue-700 text-xs py-1 px-2 rounded-full">
+            4 lançamentos
+          </span>
+        </div>
+      </div>
+      
+      <div class="bg-gray-50 rounded-lg mb-4">
+        <div class="transaction-item">
+          <div class="flex items-center">
+            <div class="transaction-icon income">
+              <i class="fas fa-arrow-down"></i>
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">Assinatura Mensal</p>
+              <p class="text-xs text-gray-500">Unico Drop</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <p class="font-semibold text-green-600 mr-4">+ R$ 99,90</p>
+            <div class="transaction-actions">
+              <button class="transaction-action-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="transaction-action-btn">
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="transaction-item">
+          <div class="flex items-center">
+            <div class="transaction-icon expense">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">Loja Virtual</p>
+              <p class="text-xs text-gray-500">Shopify</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <p class="font-semibold text-red-600 mr-4">- R$ 89,00</p>
+            <div class="transaction-actions">
+              <button class="transaction-action-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="transaction-action-btn">
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="transaction-item">
+          <div class="flex items-center">
+            <div class="transaction-icon income">
+              <i class="fas fa-arrow-down"></i>
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">Venda presencial</p>
+              <p class="text-xs text-gray-500">Cliente: João P.</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <p class="font-semibold text-green-600 mr-4">+ R$ 297,00</p>
+            <div class="transaction-actions">
+              <button class="transaction-action-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="transaction-action-btn">
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="transaction-item">
+          <div class="flex items-center">
+            <div class="transaction-icon expense">
+              <i class="fas fa-arrow-up"></i>
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">Ferramenta de Marketing</p>
+              <p class="text-xs text-gray-500">ADS</p>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <p class="font-semibold text-red-600 mr-4">- R$ 45,00</p>
+            <div class="transaction-actions">
+              <button class="transaction-action-btn">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="transaction-action-btn">
+                <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-between mb-4">
+        <div>
+          <p class="text-xs text-gray-500">Saldo do dia</p>
+          <p class="text-lg font-bold text-blue-600">+ R$ 312,90</p>
+        </div>
+        <div class="flex flex-col items-end">
+          <p class="text-xs text-gray-500">Processados</p>
+          <p class="text-sm font-medium text-gray-700">0 de 4</p>
+        </div>
+      </div>
+      
+      <div class="flex space-x-3">
+        <button class="btn-primary flex-1 flex items-center justify-center" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+          <i class="fas fa-plus-circle mr-2"></i> Adicionar Lançamento
+        </button>
+        <button class="flex-none w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition">
+          <i class="fas fa-ellipsis-h"></i>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-8 p-6 text-gray-500">
+    <div class="max-w-md mx-auto">
+      <div class="flex justify-center space-x-4 mb-4">
+        <a href="#" class="text-gray-400 hover:text-gray-600 transition"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-gray-400 hover:text-gray-600 transition"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-gray-400 hover:text-gray-600 transition"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-gray-400 hover:text-gray-600 transition"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p class="text-sm">&copy; 2025 Unico Drop. Todos os direitos reservados.</p>
+      <p class="text-xs mt-2">Versão 2.5.1</p>
+    </div>
+  </footer>
+
+</body>
+</html>
