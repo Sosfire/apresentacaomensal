@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Semanal - Unico Drop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #f0faff;
+            --text-color: #0a192f;
+            --card-bg: rgba(0, 0, 0, 0.05);
+            --accent-color: #0099ff;
+        }
+        .dark-mode {
+            --bg-color: #0a192f;
+            --text-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --accent-color: #00b4ff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+        }
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            border-radius: 1rem;
+        }
+        .glass:hover {
+            transform: translateY(-5px);
+        }
+        .navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            padding: 20px;
+        }
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .toggle-btn {
+            cursor: pointer;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .toggle-btn:hover {
+            background: #007acc;
+            transform: scale(1.05);
+        }
+        .chart-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .active {
+            display: block;
+        }
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .icon {
+            margin-right: 0.5rem;
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        .logo {
+            max-width: 150px;
+        }
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background: #007acc;
+            transform: scale(1.05);
+        }
+        .chart-wrapper {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .text-content {
+            color: #4a5568;
+        }
+        .text-content-light {
+            color: #718096;
+        }
+        .dark-mode .text-content {
+            color: #e2e8f0;
+        }
+        .dark-mode .text-content-light {
+            color: #cbd5e0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col" id="theme">
+    <nav class="navbar flex justify-between items-center shadow-md px-6">
+        <a href="index.html">
+            <img src="logo.png" alt="Unico Drop Logo" class="h-16" style="filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));">
+        </a>
+        <button class="toggle-btn" onclick="toggleTheme()">🌙 / ☀️</button>
+    </nav>
+    <div class="container mx-auto p-6">
+        <header class="text-center mb-12">
+            <h1 class="title text-gradient mb-4">
+                <i class="fas fa-chart-line icon"></i>Relatório Semanal
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300">Unico Drop - Análise Detalhada</p>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card glass">
+                <i class="fas fa-tasks text-4xl mb-4 text-blue-500"></i>
+                <div class="stat-number">155</div>
+                <p class="text-lg">Total de Atendimentos</p>
+            </div>
+            <div class="stat-card glass">
+                <i class="fas fa-ticket-alt text-4xl mb-4 text-green-500"></i>
+                <div class="stat-number">132</div>
+                <p class="text-lg">Atendimentos</p>
+            </div>
+            <div class="stat-card glass">
+                <i class="fas fa-exclamation-circle text-4xl mb-4 text-red-500"></i>
+                <div class="stat-number">4</div>
+                <p class="text-lg">Chamados Abertos</p>
+            </div>
+            <div class="stat-card glass">
+                <i class="fas fa-check-circle text-4xl mb-4 text-orange-500"></i>
+                <div class="stat-number">19</div>
+                <p class="text-lg">Chamados Encerrados</p>
+            </div>
+        </div>
+
+        <!-- Seção de Informações Gerais -->
+        <section class="glass p-8 mb-10">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-info-circle text-accent-color mr-2"></i>
+                <span>Informações Gerais</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="p-5 rounded-lg shadow-sm bg-opacity-30 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-sm">
+                    <div class="flex items-center">
+                        <i class="fas fa-calendar-alt text-accent-color mr-3"></i>
+                        <span class="text-lg">
+                            <span class="font-medium">Período:</span> 
+                            <span class="ml-2">14/04/2025 a 21/04/2025</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="p-5 rounded-lg shadow-sm bg-opacity-30 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-sm">
+                    <div class="flex items-center">
+                        <i class="fas fa-users text-accent-color mr-3"></i>
+                        <span class="text-lg">
+                            <span class="font-medium">Responsáveis:</span> 
+                            <span class="ml-2">Filipe, Ryan</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Seção para os Botões -->
+        <div class="flex justify-center gap-4 mb-8">
+            <button id="btnChamados" class="btn-primary">
+                <i class="fas fa-chart-bar mr-2"></i>Chamados
+            </button>
+            <button id="btnAtendimentos" class="btn-primary">
+                <i class="fas fa-headset mr-2"></i>Atendimentos
+            </button>
+            <button id="btnTotalChamados" class="btn-primary">
+                <i class="fas fa-chart-line mr-2"></i>Total de Chamados
+            </button>
+        </div>
+
+        <!-- Seção para os Gráficos -->
+        <section class="chart-wrapper glass">
+            <div class="chart-container active" id="chartChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Distribuição de Chamados
+                </h2>
+                <canvas id="chamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos -->
+            <div class="chart-container" id="chartAtendimentos">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Total de Chamados -->
+            <div class="chart-container" id="chartTotalChamados">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-bar icon"></i>Total de Chamados
+                </h2>
+                <canvas id="totalChamadosChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Chamados por Categoria -->
+            <div class="chart-container" id="chartChamadosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Chamados por Categoria
+                </h2>
+                <canvas id="chamadosCategoriaChart"></canvas>
+            </div>
+
+            <!-- Seção para o gráfico de Atendimentos por Categoria -->
+            <div class="chart-container" id="chartAtendimentosCategoria">
+                <h2 class="text-2xl font-semibold mb-4 text-purple-600">
+                    <i class="fas fa-chart-pie icon"></i>Atendimentos por Categoria
+                </h2>
+                <canvas id="atendimentosCategoriaChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Chamados Abertos -->
+        <section class="glass p-8 mt-8 mb-16">
+            <h2 class="text-3xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
+                Chamados Abertos da Semana
+            </h2>
+            <div class="grid gap-6">
+                <div class="p-6 bg-opacity-50 rounded-lg border border-opacity-20 hover:border-opacity-50 transition-all">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">ID 99172543</h3>
+                        <span class="text-sm text-gray-500">21/04/2025 15:47:24</span>
+                    </div>
+                    <p class="mt-3">Rastreios com movimentações e sem status</p>
+                </div>
+                <div class="p-6 bg-opacity-50 rounded-lg border border-opacity-20 hover:border-opacity-50 transition-all">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">ID 99091279</h3>
+                        <span class="text-sm text-gray-500">19/04/2025 12:46:24</span>
+                    </div>
+                    <p class="mt-3">Ainda não está funcionando aqui os envios manuais. Não está indo arquivo e texto, somente arquivo...</p>
+                </div>
+                <div class="p-6 bg-opacity-50 rounded-lg border border-opacity-20 hover:border-opacity-50 transition-all">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">ID 99045349</h3>
+                        <span class="text-sm text-gray-500">18/04/2025 10:20:19</span>
+                    </div>
+                    <p class="mt-3">Envio de mensagem com texto e áudio só vai o texto, áudio externo não vai. Simulei e aqui foi ao contrário, só o áudio sem o texto.</p>
+                </div>
+                <div class="p-6 bg-opacity-50 rounded-lg border border-opacity-20 hover:border-opacity-50 transition-all">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">ID 99004904</h3>
+                        <span class="text-sm text-gray-500">17/04/2025 15:16:55</span>
+                    </div>
+                    <p class="mt-3">83788 - Cliente não está conseguindo enviar a imagem do produto nos envios manuais para carrinhos e pedidos, ele já tentou realizar o procedimento pelo botão "Enviar" e pelos ícones, os dois vão apenas com o texto, sem a imagem. Realizei testes por aqui e está tudo funcionando com a extensão e no meu está enviando a imagem do produto normalmente, este cliente parecer ser um caso isolado. Fizemos diversas validações com ele, todas as possiveis, testamos no beta e fora do beta, estava tudo correto com a extensão e nada funcionou, a única informação errada que encontramos é um erro no console no momento do envio. Ele informou que até ontem dia 16/04 estava tudo ok e enviando com a imagem do produto, porém, ele não fez nenhuma alteração e do nada parou de enviar a foto do produto. Está ocorrendo com todos os carrinhos e pedidos que ele tenta enviar uma mensagem com a imagem do produto marcada como opção.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divisor visual -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-accent-color to-transparent my-12 opacity-30"></div>
+
+        <!-- Quantidade de Chamados por Plataforma -->
+        <section class="glass p-8 mb-8 mt-16">
+            <h2 class="text-3xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-list text-accent-color mr-3"></i>
+                Quantidade de Chamados por Plataforma
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="stat-card glass">
+                    <i class="fab fa-shopify text-4xl mb-4 text-purple-600"></i>
+                    <div class="stat-number">67.10%</div>
+                    <p class="text-lg">Shopify</p>
+                    <p class="text-sm text-content dark:text-content-light">104 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fas fa-users text-4xl mb-4 text-blue-500"></i>
+                    <div class="stat-number">16.77%</div>
+                    <p class="text-lg">Visitors/Sem plataforma definida</p>
+                    <p class="text-sm text-content dark:text-content-light">26 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fas fa-store text-4xl mb-4 text-green-500"></i>
+                    <div class="stat-number">8.39%</div>
+                    <p class="text-lg">Nuvemshop</p>
+                    <p class="text-sm text-content dark:text-content-light">13 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fas fa-shopping-cart text-4xl mb-4 text-yellow-500"></i>
+                    <div class="stat-number">2.58%</div>
+                    <p class="text-lg">Yampi</p>
+                    <p class="text-sm text-content dark:text-content-light">4 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fas fa-shopping-bag text-4xl mb-4 text-red-500"></i>
+                    <div class="stat-number">1.94%</div>
+                    <p class="text-lg">Cartx</p>
+                    <p class="text-sm text-content dark:text-content-light">3 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fas fa-tag text-4xl mb-4 text-indigo-500"></i>
+                    <div class="stat-number">1.94%</div>
+                    <p class="text-lg">LPQV</p>
+                    <p class="text-sm text-content dark:text-content-light">3 chamados</p>
+                </div>
+                <div class="stat-card glass">
+                    <i class="fab fa-wordpress text-4xl mb-4 text-blue-400"></i>
+                    <div class="stat-number">1.29%</div>
+                    <p class="text-lg">Woocommerce</p>
+                    <p class="text-sm text-content dark:text-content-light">2 chamados</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relatório Detalhado -->
+        <section class="glass p-8 mb-8">
+            <h2 class="text-3xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-file-alt text-accent-color mr-3"></i>
+                Relatório Detalhado de Chamados
+            </h2>
+            
+            <!-- Resumo dos Chamados -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-accent-color flex items-center">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Resumo Geral dos Chamados
+                </h3>
+                
+                <div class="glass p-6 rounded-lg">
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Problemas com Rastreios Desatualizados -->
+                        <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-300">
+                            <div class="flex items-center mb-2">
+                                <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                                    <i class="fas fa-truck text-gray-500 text-xs"></i>
+                                </div>
+                                <h4 class="text-base font-medium text-content">Problemas com Rastreios Desatualizados</h4>
+                            </div>
+                            <p class="text-xs text-content-light ml-10 font-medium">
+                                Falhas na atualização automática de códigos de rastreio, mesmo com movimentações registradas nas transportadoras, geraram dúvidas sobre a confiabilidade das informações e impactaram a comunicação com os clientes.
+                            </p>
+                        </div>
+                        
+                        <!-- Problemas com WhatsApp/Automação -->
+                        <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-300">
+                            <div class="flex items-center mb-2">
+                                <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                                    <i class="fas fa-robot text-gray-500 text-xs"></i>
+                                </div>
+                                <h4 class="text-base font-medium text-content">Problemas com WhatsApp/Automação</h4>
+                            </div>
+                            <p class="text-xs text-content-light ml-10 font-medium">
+                                Usuários enfrentaram instabilidade na conexão do WhatsApp, falhas na geração do QR Code e mensagens que não eram enviadas automaticamente, especialmente após atualizações do WhatsApp.
+                            </p>
+                        </div>
+                        
+                        <!-- Problemas com Extensão WhatsApp -->
+                        <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-300">
+                            <div class="flex items-center mb-2">
+                                <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                                    <i class="fas fa-puzzle-piece text-gray-500 text-xs"></i>
+                                </div>
+                                <h4 class="text-base font-medium text-content">Problemas com Extensão WhatsApp</h4>
+                            </div>
+                            <p class="text-xs text-content-light ml-10 font-medium">
+                                Após atualizações do WhatsApp Web, a extensão apresentou falhas na aba lateral, envio manual de mensagens e botões que deixavam de funcionar, prejudicando o atendimento direto ao cliente.
+                            </p>
+                        </div>
+                        
+                        <!-- Problemas de Integração/Sincronização -->
+                        <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-300">
+                            <div class="flex items-center mb-2">
+                                <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                                    <i class="fas fa-plug text-gray-500 text-xs"></i>
+                                </div>
+                                <h4 class="text-base font-medium text-content">Problemas de Integração/Sincronização</h4>
+                            </div>
+                            <p class="text-xs text-content-light ml-10 font-medium">
+                                Relatos de falhas na sincronização de pedidos e carrinhos abandonados com plataformas como Shopify e Nuvemshop, além de atrasos causados por mudanças de gateway.
+                            </p>
+                        </div>
+                        
+                        <!-- Custos e Valores no Dashboard -->
+                        <div class="p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:shadow-sm transition-all duration-300">
+                            <div class="flex items-center mb-2">
+                                <div class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mr-3">
+                                    <i class="fas fa-chart-line text-gray-500 text-xs"></i>
+                                </div>
+                                <h4 class="text-base font-medium text-content">Custos e Valores no Dashboard</h4>
+                            </div>
+                            <p class="text-xs text-content-light ml-10 font-medium">
+                                Erros nos valores exibidos no dashboard, com duplicidade de pedidos e falhas na integração de custos da Shopify, além de dados desatualizados de campanhas do Google e Facebook Ads.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categorias Detalhadas -->
+            <div class="space-y-6">
+
+                            <!-- Resumo dos Chamados -->
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4 text-accent-color flex items-center">
+                    <i class="fas fa-chart-bar mr-3"></i>
+                    Principais Assuntos dos Chamados
+                </h3>
+
+                <!-- Problemas com Extensão WhatsApp -->
+                <div class="glass p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-blue-500">
+                        <i class="fas fa-puzzle-piece mr-2"></i>
+                        Problemas com Extensão WhatsApp (26 Chamados)
+                    </h4>
+                    <p class="mb-4 text-content">
+                        Usuários enfrentaram falhas após atualizações da extensão, especialmente na funcionalidade de envio manual de mensagens e na exibição da barra lateral.
+                    </p>
+                    <div class="bg-opacity-5 bg-blue-500 p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">Casos Relacionados:</h5>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Chamado #45478: "Cliente não conseguindo enviar mensagens com arquivos externos"</li>
+                            <li>Chamado #39852146851: "Problemas com envio de arquivos externos no manual"</li>
+                            <li>Chamado #32543: "Anexo não sendo enviado nos envios manuais"</li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <!-- Problemas com WhatsApp/Automação -->
+                <div class="glass p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-blue-500">
+                        <i class="fas fa-robot mr-2"></i>
+                        Problemas com WhatsApp/Automação (23 Chamados)
+                    </h4>
+                    <p class="mb-4 text-content">
+                        Chamados concentrados em falhas de conexão do WhatsApp, QR Codes inválidos e mensagens automáticas que não estão sendo disparadas corretamente.
+                    </p>
+                    <div class="bg-opacity-5 bg-blue-500 p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">Casos Relacionados:</h5>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Chamado #60879241370: "Cliente informou que automação não estava conectando"</li>
+                            <li>Chamado #29423: "Mensagens de WhatsApp não estavam sendo disparadas"</li>
+                            <li>Chamado #83050: "Automação de Postado não funcionando corretamente"</li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <!-- Problemas com Rastreio -->
+                <div class="glass p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-blue-500">
+                        <i class="fas fa-truck mr-2"></i>
+                        Problemas com Rastreio (18 Chamados)
+                    </h4>
+                    <p class="mb-4 text-content">
+                        Usuários relataram dificuldades com atualizações de códigos de rastreio, divergência de informações entre plataformas e ausência de integração automática do código.
+                    </p>
+                    <div class="bg-opacity-5 bg-blue-500 p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">Casos Relacionados:</h5>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Chamado #27827: "Cliente com rastreios desatualizados na plataforma"</li>
+                            <li>Chamado #78716: "Cliente com rastreios desatualizados, necessitando atualização manual"</li>
+                            <li>Chamado #81188: "Rastreio dos Correios com movimentação que não aparece no Único"</li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <!-- Integração/Sincronização -->
+                <div class="glass p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-blue-500">
+                        <i class="fas fa-sync mr-2"></i>
+                        Integração/Sincronização (16 Chamados)
+                    </h4>
+                    <p class="mb-4 text-content">
+                        Foram reportados problemas na sincronização de carrinhos abandonados, pedidos não refletindo na plataforma e dificuldades com checkout nativo Shopify.
+                    </p>
+                    <div class="bg-opacity-5 bg-blue-500 p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">Casos Relacionados:</h5>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Chamado #60879241370: "Cliente tinha pedidos não integrados na plataforma" - Problema ocorreu várias vezes com este cliente</li>
+                            <li>Chamado #64400654550: "Cliente Grande utiliza o checkout nativo da Shopify com gateway da AppMax que funcionava, mas ao trocar para MercadoPago as integrações passaram a faltar informações como valor do pagamento e há delay na integração de carrinhos"</li>
+                            <li>Chamado #76121: "Cliente tinha carrinhos abandonados não integrados"</li>
+                        </ul>
+                    </div>
+                </div>
+                <br>
+                <!-- Custos e Valores no Dashboard -->
+                <div class="glass p-6 rounded-lg">
+                    <h4 class="text-xl font-semibold mb-4 flex items-center text-blue-500">
+                        <i class="fas fa-chart-line mr-2"></i>
+                        Custos e Valores no Dashboard (15 Chamados)
+                    </h4>
+                    <p class="mb-4 text-content">
+                        Dúvidas e erros relacionados a valores divergentes na plataforma, inconsistência de custos exibidos e dados de campanhas de Facebook/Google Ads desatualizados.
+                    </p>
+                    <div class="bg-opacity-5 bg-blue-500 p-4 rounded-lg">
+                        <h5 class="font-semibold mb-2">Casos Relacionados:</h5>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Chamado #63750930666: "Cliente está criando vários pedidos duplicados com valores zerados, mas no Dashboard (filtrando 10/04) os valores de custo desses pedidos aparentemente estão sendo contabilizados, inflando o valor para R$ 8.378,80 quando a soma real seria R$ 3.114,80"</li>
+                            <li>Chamado #82436: "Cliente duplicou pedidos com valor zerado na Shopify que estão contabilizando no custo de produtos na dashboard. EX: #1446, #1445, #1444. O custo dos produtos no ranking não coincide com o valor na parte superior do dashboard"</li>
+                            <li>Chamado #81402: "Cliente informou que está dando diferença nos valores de pedidos no dashboard" - Este problema foi relatado várias vezes pelo mesmo cliente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Sugestões da Semana -->
+        <section class="glass p-8 mb-8">
+            <h2 class="text-3xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>
+                Sugestões da Semana
+            </h2>
+            <div class="mb-4">
+                <div class="flex items-center mb-4">
+                    <div class="text-4xl font-bold text-yellow-500 mr-4">7</div>
+                    <p class="text-lg">Sugestões registradas esta semana<p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-1 gap-6">
+                <div class="glass p-6 rounded-lg shadow-sm bg-blue-50 bg-opacity-60 hover:shadow-lg transition-all">
+                    <ul class="mt-3">
+                        <li class="flex flex-col p-4 border border-blue-100 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-300 mb-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-lg"></i>
+                                <span class="font-medium text-blue-700">Chamado #98953067</span>
+                                <span class="ml-auto text-xs text-gray-600 italic">16/04/2025 15:38:48</span>
+                            </div>
+                            <div class="ml-6">
+                                <p class="text-gray-800 font-normal">Cliente perguntando sobre integração com a Adoorei</p>
+                                <div class="mt-2 flex items-center">
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium border border-blue-200">4 Perguntas sobre a integração da Adoorei</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex flex-col p-4 border border-blue-100 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-300 mb-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-lg"></i>
+                                <span class="font-medium text-blue-700">Chamado #99012098</span>
+                                <span class="ml-auto text-xs text-gray-600 italic">17/04/2025 17:21:48</span>
+                            </div>
+                            <div class="ml-6">
+                                <p class="text-gray-800 font-normal">Cliente sugerindo configuração de custos diferentes para produtos diferentes</p>
+                                <div class="mt-2 flex items-center">
+                                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium border border-purple-200">Melhoria #83027</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex flex-col p-4 border border-blue-100 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-300 mb-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-lg"></i>
+                                <span class="font-medium text-blue-700">Chamado #98879288</span>
+                                <span class="ml-auto text-xs text-gray-600 italic">15/04/2025 09:58:49</span>
+                            </div>
+                            <div class="ml-6">
+                                <p class="text-gray-800 font-normal">Sugestão para download de planilha com dados do menu Clientes Vip</p>
+                                <div class="mt-2 flex items-center">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium border border-green-200">Exportação de Dados</span>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="flex flex-col p-4 border border-blue-100 rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-300 mb-3 shadow-sm">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-check-circle text-green-500 mr-2 text-lg"></i>
+                                <span class="font-medium text-blue-700">Chamado #98879287</span>
+                                <span class="ml-auto text-xs text-gray-600 italic">15/04/2025 09:58:25</span>
+                            </div>
+                            <div class="ml-6">
+                                <p class="text-gray-800 font-normal">Pedido para criar campo específico para LTV</p>
+                                <div class="mt-2 flex items-center">
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-medium border border-yellow-200">Análise de Clientes</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Função para criar gráficos
+        const createChart = (ctx, type, data, options) => {
+            return new Chart(ctx, {
+                type: type,
+                data: data,
+                options: options
+            });
+        };
+
+        // Dados e configurações dos gráficos
+        const chartsData = {
+            chamados: {
+                labels: ['Dúvida - Assinatura', 'Erro - Integração/Sincronização', 'Erro - Rastreio', 'Erro - WhatsApp Automação', 'Dúvida - Resposta Chamado'],
+                datasets: [{
+                    label: 'Chamados por Tipo',
+                    data: [3, 3, 2, 2, 2],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['Dúvida - WhatsApp Automação', 'Dúvida - Extensão WhatsApp', 'Dúvida: Integração de Plataforma (Loja, checkout, Gateway)', 'Dúvida - WhatsApp Manual', 'Dúvida - Dashboard'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [17, 16, 14, 10, 8],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            totalChamados: {
+                labels: ['Atendimentos', 'Chamado Aberto', 'Chamado Encerrado'],
+                datasets: [{
+                    label: 'Total de Chamados',
+                    data: [132, 4, 19],
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+        // Configurações dos gráficos
+        const chartsConfig = {
+            chamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            atendimentos: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            totalChamados: {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Renderiza os gráficos
+        const ctxChamados = document.getElementById('chamadosChart').getContext('2d');
+        const ctxAtendimentos = document.getElementById('atendimentosChart').getContext('2d');
+        const ctxTotalChamados = document.getElementById('totalChamadosChart').getContext('2d');
+
+        createChart(ctxChamados, chartsConfig.chamados.type, chartsData.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentos, chartsConfig.atendimentos.type, chartsData.atendimentos, chartsConfig.atendimentos.options);
+        createChart(ctxTotalChamados, chartsConfig.totalChamados.type, chartsData.totalChamados, chartsConfig.totalChamados.options);
+
+        // Função para alternar entre os gráficos
+        const showChart = (chartId) => {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(chartId).classList.add('active');
+        };
+
+        // Eventos de clique nos botões
+        document.getElementById('btnChamados').addEventListener('click', () => showChart('chartChamados'));
+        document.getElementById('btnAtendimentos').addEventListener('click', () => showChart('chartAtendimentos'));
+        document.getElementById('btnTotalChamados').addEventListener('click', () => showChart('chartTotalChamados'));
+
+        // Dados e configurações dos gráficos adicionais
+        const chartsDataCategoria = {
+            chamados: {
+                labels: ['Shopify', 'Nuvemshop', 'Cartx', 'Yampi', 'Woocommerce'],
+                datasets: [{
+                    label: 'Chamados por Categoria',
+                    data: [154, 10, 8, 10, 6],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            atendimentos: {
+                labels: ['WhatsApp Automação', 'Integração de Plataforma', 'Rastreio', 'Assinatura', 'Config Pendente'],
+                datasets: [{
+                    label: 'Atendimentos por Categoria',
+                    data: [23, 15, 19, 20, 7],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        };
+        // Renderiza os gráficos adicionais
+        const ctxChamadosCategoria = document.getElementById('chamadosCategoriaChart').getContext('2d');
+        const ctxAtendimentosCategoria = document.getElementById('atendimentosCategoriaChart').getContext('2d');
+
+        createChart(ctxChamadosCategoria, 'bar', chartsDataCategoria.chamados, chartsConfig.chamados.options);
+        createChart(ctxAtendimentosCategoria, 'bar', chartsDataCategoria.atendimentos, chartsConfig.atendimentos.options);
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        // Adicionar animação suave ao scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Atualizar cores dos gráficos baseado no tema
+        function updateChartColors() {
+            const isDark = document.body.classList.contains('dark-mode');
+            Chart.defaults.color = isDark ? '#f8fafc' : '#0a192f';
+            // Atualizar todos os gráficos
+            Chart.instances.forEach(chart => chart.update());
+        }
+
+        // Atualizar cores dos gráficos quando mudar o tema
+        document.querySelector('.toggle-btn').addEventListener('click', updateChartColors);
+    </script>
+</body>
+</html>
+                   
